@@ -29,4 +29,24 @@ class Visit extends Model
             return ['today' => 0, 'month' => 0, 'total' => 0];
         }
     }
+
+    public static function dailyTrend(int $days = 30): array
+    {
+        $lastDay = now()->startOfDay();
+        $firstDay = $lastDay->copy()->subDays(max(1, $days) - 1);
+        $counts = static::whereBetween('date', [$firstDay->toDateString(), $lastDay->toDateString()])
+            ->pluck('count', 'date');
+
+        $trend = [];
+        for ($date = $firstDay->copy(); $date->lte($lastDay); $date->addDay()) {
+            $dateKey = $date->toDateString();
+            $trend[] = [
+                'date' => $dateKey,
+                'label' => $date->format('d/m'),
+                'count' => (int) $counts->get($dateKey, 0),
+            ];
+        }
+
+        return $trend;
+    }
 }

@@ -19,6 +19,8 @@
         .btn-pa { background:var(--pa-primary); color:#fff; border-color:var(--pa-primary); }
         .btn-pa:hover { background:var(--pa-primary-dark); color:#fff; }
         .ql-editor { min-height:240px; background:#fff; }
+        .dashboard-chart-scroll { overflow-x:auto; }
+        .dashboard-chart-svg { display:block; width:100%; min-width:720px; height:auto; }
     </style>
 </head>
 <body>
