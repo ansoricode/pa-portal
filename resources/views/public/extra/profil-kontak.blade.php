@@ -1,5 +1,14 @@
+@php
+    $buildingPhotoPath = $setting('building_photo');
+    $buildingPhotoUrl = $buildingPhotoPath ? asset('storage/'.$buildingPhotoPath) : $page->image_url;
+    $buildingPhotoCaption = $buildingPhotoPath ? $setting('building_photo_caption') : null;
+    $buildingPhotoPosition = $setting('building_photo_position', 'top');
+@endphp
+@if($buildingPhotoUrl && $buildingPhotoPosition === 'top')
+    @include('public.partials.building-photo')
+@endif
 <div class="row g-4">
-    <div class="col-md-6">
+    <div class="col-12">
         <ul class="list-unstyled lh-lg text-secondary">
             @if($setting('address_street'))<li><strong>Jalan:</strong> {{ $setting('address_street') }}</li>@endif
             @if($setting('address_village'))<li><strong>Desa/Kelurahan:</strong> {{ $setting('address_village') }}</li>@endif
@@ -10,9 +19,7 @@
             @if($setting('website'))<li><strong>Website Resmi:</strong> <a href="{{ $setting('website') }}">{{ $setting('website') }}</a></li>@endif
         </ul>
     </div>
-    <div class="col-md-6">
-        @if($page->image_url)
-            <img src="{{ $page->image_url }}" alt="Foto Gedung Kantor" class="img-fluid rounded shadow-sm">
-        @endif
-    </div>
 </div>
+@if($buildingPhotoUrl && $buildingPhotoPosition === 'bottom')
+    @include('public.partials.building-photo')
+@endif

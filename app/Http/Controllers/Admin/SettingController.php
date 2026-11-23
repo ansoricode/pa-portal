@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
 {
@@ -24,6 +25,7 @@ class SettingController extends Controller
             $rules[$f['name']] = match ($f['type']) {
                 'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
                 'favicon' => 'nullable|file|mimetypes:image/png,image/x-icon,image/vnd.microsoft.icon|max:1024',
+                'select' => ['nullable', 'string', Rule::in(array_keys($f['options'] ?? []))],
                 default => 'nullable|string|max:1000',
             };
         }

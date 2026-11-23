@@ -11,11 +11,17 @@
             <div class="card-body">
                 <div class="row g-3">
                     @foreach($fields as $f)
-                        @php $name = $f['name']; $val = $setting($name); @endphp
+                        @php $name = $f['name']; $val = $setting($name, $f['default'] ?? null); @endphp
                         <div class="col-md-{{ in_array($f['type'], ['textarea','image','favicon']) ? 12 : 6 }}">
                             <label class="form-label fw-semibold" for="s_{{ $name }}">{{ $f['label'] }}</label>
                             @if($f['type'] === 'textarea')
                                 <textarea id="s_{{ $name }}" name="{{ $name }}" rows="3" class="form-control @error($name) is-invalid @enderror">{{ old($name, $val) }}</textarea>
+                            @elseif($f['type'] === 'select')
+                                <select id="s_{{ $name }}" name="{{ $name }}" class="form-select @error($name) is-invalid @enderror">
+                                    @foreach($f['options'] as $optionValue => $optionLabel)
+                                        <option value="{{ $optionValue }}" @selected((string) old($name, $val) === (string) $optionValue)>{{ $optionLabel }}</option>
+                                    @endforeach
+                                </select>
                             @elseif(in_array($f['type'], ['image', 'favicon']))
                                 @if($val)
                                     <div class="mb-2"><img src="{{ asset('storage/'.$val) }}" alt="" style="max-height:70px" class="border rounded p-1 bg-white">

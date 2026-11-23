@@ -70,6 +70,18 @@ return [
             ['name' => 'whatsapp',         'label' => 'WhatsApp PTSP',          'type' => 'text'],
             ['name' => 'email',            'label' => 'Email Resmi',            'type' => 'text'],
             ['name' => 'website',          'label' => 'Website Resmi',          'type' => 'text'],
+            ['name' => 'building_photo', 'label' => 'Foto Gedung', 'type' => 'image', 'hint' => 'Foto ini ditampilkan pada halaman Alamat, Kontak & Foto Gedung.'],
+            ['name' => 'building_photo_caption', 'label' => 'Keterangan Foto Gedung', 'type' => 'textarea'],
+            [
+                'name' => 'building_photo_position',
+                'label' => 'Posisi Foto Gedung',
+                'type' => 'select',
+                'options' => [
+                    'top' => 'Di atas informasi kontak',
+                    'bottom' => 'Di bawah informasi kontak',
+                ],
+                'default' => 'top',
+            ],
         ],
         'Media Sosial' => [
             ['name' => 'facebook_url',  'label' => 'Facebook',  'type' => 'text'],
