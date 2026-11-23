@@ -15,6 +15,7 @@
                 <h1 class="font-display h2 fw-bold text-pa-primary">{{ $article->title }}</h1>
                 <p class="text-secondary small border-bottom pb-3 mb-4">
                     {{ $article->published_at->translatedFormat('d F Y') }}@if($article->author) | Penulis: {{ $article->author }}@endif
+                    | <i class="bi bi-eye me-1" aria-hidden="true"></i>{{ number_format($article->view_count, 0, ',', '.') }} pengunjung
                 </p>
                 @if($article->image)
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}" class="img-fluid rounded mb-4 w-100" style="max-height: 420px; object-fit: cover;">

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\News;
 use App\Models\Page;
 use App\Models\Setting;
+use App\Models\Shortcut;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -88,5 +89,41 @@ class SettingsSeoTest extends TestCase
         $this->actingAs($admin)->put(route('admin.settings.update'), [
             'favicon' => UploadedFile::fake()->create('favicon.txt', 1, 'text/plain'),
         ])->assertSessionHasErrors('favicon');
+    }
+
+    public function test_sipp_setting_updates_the_homepage_shortcut_url(): void
+    {
+        config(['portal.require_2fa' => false]);
+        $admin = User::factory()->create([
+            'role' => 'superadmin',
+            'is_active' => true,
+            'must_change_password' => false,
+        ]);
+        Shortcut::create([
+            'title' => 'SIPP Satker',
+            'description' => 'Sistem Informasi Penelusuran Perkara',
+            'icon' => 'bi-search',
+            'url' => 'https://sipp-lama.example.test',
+            'is_external' => true,
+            'sort_order' => 1,
+            'is_active' => true,
+        ]);
+        $newSippUrl = 'https://sipp-baru.example.test';
+
+        $this->actingAs($admin)
+            ->put(route('admin.settings.update'), [
+                'sipp_url' => $newSippUrl,
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('settings', [
+            'key' => 'sipp_url',
+            'value' => $newSippUrl,
+        ]);
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('href="'.$newSippUrl.'"', false)
+            ->assertDontSee('href="https://sipp-lama.example.test"', false);
     }
 }

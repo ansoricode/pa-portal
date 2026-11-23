@@ -25,9 +25,15 @@ class NewsController extends Controller
         return view('public.news-index', ['news' => $news, 'category' => $category, 'term' => $term]);
     }
 
-    public function show(string $slug)
+    public function show(Request $request, string $slug)
     {
         $article = News::published()->where('slug', $slug)->firstOrFail();
+        $visitKey = 'news_visited_'.$article->id.'_'.now()->toDateString();
+
+        if (! $request->session()->has($visitKey)) {
+            $article->increment('view_count');
+            $request->session()->put($visitKey, true);
+        }
 
         $related = News::published()->where('id', '!=', $article->id)
             ->orderByDesc('published_at')->limit(3)->get();

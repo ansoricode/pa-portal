@@ -11,7 +11,11 @@ class News extends Model
 
     protected $guarded = [];
 
-    protected $casts = ['published_at' => 'datetime', 'is_published' => 'boolean'];
+    protected $casts = [
+        'published_at' => 'datetime',
+        'is_published' => 'boolean',
+        'view_count' => 'integer',
+    ];
 
     protected static function booted(): void
     {
@@ -21,7 +25,7 @@ class News extends Model
                 $slug = $base;
                 $i = 2;
                 while (static::where('slug', $slug)->where('id', '!=', $news->id ?? 0)->exists()) {
-                    $slug = $base . '-' . $i++;
+                    $slug = $base.'-'.$i++;
                 }
                 $news->slug = $slug;
             }
@@ -39,8 +43,8 @@ class News extends Model
     public function getImageUrlAttribute(): string
     {
         return $this->image
-            ? asset('storage/' . $this->image)
-            : 'https://placehold.co/600x360/056e4f/ffffff?text=' . urlencode($this->category);
+            ? asset('storage/'.$this->image)
+            : 'https://placehold.co/600x360/056e4f/ffffff?text='.urlencode($this->category);
     }
 
     public function getBadgeClassAttribute(): string

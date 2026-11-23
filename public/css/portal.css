@@ -59,6 +59,25 @@
         /* Tipografi */
         .font-display { font-family: 'Montserrat', sans-serif; }
 
+        .navbar-brand {
+            min-width: 0;
+            max-width: calc(100% - 4.5rem);
+            white-space: normal;
+        }
+        .navbar-brand > div {
+            min-width: 0;
+        }
+        .navbar-brand .font-display {
+            overflow-wrap: anywhere;
+        }
+
+        @media (min-width: 1400px) {
+            .navbar-nav .nav-link {
+                padding-right: 0.5rem;
+                padding-left: 0.5rem;
+            }
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }

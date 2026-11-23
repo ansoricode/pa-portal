@@ -24,7 +24,7 @@ return [
         'group' => 'Beranda', 'label' => 'Slider Beranda', 'icon' => 'bi-images',
         'model' => Slider::class, 'order' => ['sort_order', 'asc'],
         'search' => ['title', 'badge'], 'filters' => ['is_active' => ['label' => 'Status', 'options' => ['1' => 'Aktif', '0' => 'Nonaktif']]],
-        'hint'  => 'Maksimal 3–5 slide aktif sesuai SK 2722/2026 Bab III huruf C.',
+        'hint' => 'Maksimal 3–5 slide aktif sesuai SK 2722/2026 Bab III huruf C.',
         'columns' => ['title' => 'Judul', 'badge' => 'Label', 'sort_order' => 'Urutan', 'is_active' => 'Aktif'],
         'fields' => [
             ['name' => 'badge', 'label' => 'Label Kecil (badge)', 'type' => 'text', 'rules' => 'nullable|string|max:100'],
@@ -58,7 +58,7 @@ return [
         'group' => 'Beranda', 'label' => 'Pengumuman Beranda', 'icon' => 'bi-megaphone',
         'model' => Announcement::class, 'order' => ['published_at', 'desc'],
         'search' => ['title', 'badge'], 'filters' => ['is_active' => ['label' => 'Status', 'options' => ['1' => 'Aktif', '0' => 'Nonaktif']]],
-        'columns' => ['badge' => 'Label', 'title' => 'Judul', 'published_at' => 'Tanggal', 'is_active' => 'Aktif'],
+        'columns' => ['badge' => 'Label', 'title' => 'Judul', 'published_at' => 'Tanggal', 'view_count' => 'Pengunjung', 'is_active' => 'Aktif'],
         'fields' => [
             ['name' => 'badge', 'label' => 'Label (mis. Relaas Panggilan Ghaib)', 'type' => 'text', 'rules' => 'required|string|max:100'],
             ['name' => 'title', 'label' => 'Judul Pengumuman', 'type' => 'text', 'rules' => 'required|string|max:255'],
@@ -87,7 +87,7 @@ return [
         'group' => 'Berita', 'label' => 'Berita & Publikasi', 'icon' => 'bi-newspaper',
         'model' => News::class, 'order' => ['published_at', 'desc'], 'search' => ['title', 'category'],
         'filters' => ['category' => ['label' => 'Kategori', 'options_config' => 'portal.news_categories'], 'is_published' => ['label' => 'Tayang', 'options' => ['1' => 'Tayang', '0' => 'Draf']]],
-        'columns' => ['title' => 'Judul', 'category' => 'Kategori', 'published_at' => 'Terbit', 'is_published' => 'Tayang'],
+        'columns' => ['title' => 'Judul', 'category' => 'Kategori', 'published_at' => 'Terbit', 'view_count' => 'Pengunjung', 'is_published' => 'Tayang'],
         'fields' => [
             ['name' => 'title', 'label' => 'Judul', 'type' => 'text', 'rules' => 'required|string|max:255'],
             ['name' => 'category', 'label' => 'Kategori', 'type' => 'select', 'options_config' => 'portal.news_categories', 'rules' => 'required|string|max:100'],
@@ -104,7 +104,7 @@ return [
         'group' => 'Halaman Statis', 'label' => 'Halaman Menu', 'icon' => 'bi-file-earmark-text',
         'model' => Page::class, 'order' => ['section', 'asc'], 'order2' => ['sort_order', 'asc'], 'search' => ['title', 'slug'],
         'filters' => ['section' => ['label' => 'Seksi', 'options' => ['profil' => 'Profil', 'layanan-hukum' => 'Layanan Hukum', 'transparansi' => 'Transparansi', 'layanan-publik' => 'Layanan Publik']], 'is_active' => ['label' => 'Status', 'options' => ['1' => 'Aktif', '0' => 'Nonaktif']]],
-        'hint'  => 'Halaman menu Profil, Layanan Hukum, Transparansi, dan Layanan Publik. Tabel/daftar data (jadwal, dokumen, pejabat, dll.) dikelola di menu masing-masing dan tampil otomatis pada halaman dengan slug yang sama.',
+        'hint' => 'Halaman menu Profil, Layanan Hukum, Transparansi, dan Layanan Publik. Tabel/daftar data (jadwal, dokumen, pejabat, dll.) dikelola di menu masing-masing dan tampil otomatis pada halaman dengan slug yang sama.',
         'columns' => ['section' => 'Seksi', 'title' => 'Judul', 'slug' => 'Slug', 'sort_order' => 'Urutan', 'is_active' => 'Aktif'],
         'fields' => [
             ['name' => 'section', 'label' => 'Seksi Menu', 'type' => 'select', 'options' => [
@@ -150,7 +150,7 @@ return [
         'group' => 'Dokumen', 'label' => 'Dokumen & Laporan', 'icon' => 'bi-folder2-open',
         'model' => Document::class, 'order' => ['category', 'asc'], 'search' => ['title', 'category'],
         'filters' => ['category' => ['label' => 'Kategori', 'options_config' => 'portal.document_categories'], 'is_active' => ['label' => 'Status', 'options' => ['1' => 'Aktif', '0' => 'Nonaktif']]],
-        'hint'  => 'SAKIP, laporan keuangan, RUP, SK panjar, prosedur berperkara, statistik, PPID, dan pengaduan. Dokumen tampil otomatis di halaman sesuai kategori.',
+        'hint' => 'SAKIP, laporan keuangan, RUP, SK panjar, prosedur berperkara, statistik, PPID, dan pengaduan. Dokumen tampil otomatis di halaman sesuai kategori.',
         'columns' => ['category' => 'Kategori', 'title' => 'Judul', 'year' => 'Tahun', 'is_active' => 'Aktif'],
         'fields' => [
             ['name' => 'category', 'label' => 'Kategori', 'type' => 'select', 'options_config' => 'portal.document_categories', 'rules' => 'required|string|max:50'],
@@ -200,7 +200,7 @@ return [
         'group' => 'Profil & Aparatur', 'label' => 'LHKPN / LHKASN', 'icon' => 'bi-shield-check',
         'model' => LhkpnReport::class, 'order' => ['year', 'desc'], 'with' => ['official'],
         'search' => ['official.name', 'year'],
-        'hint'  => 'Unggah ikhtisar kekayaan minimal 2 tahun terakhir. Pejabat harus ditandai "Wajib lapor" di menu Pejabat & Pegawai.',
+        'hint' => 'Unggah ikhtisar kekayaan minimal 2 tahun terakhir. Pejabat harus ditandai "Wajib lapor" di menu Pejabat & Pegawai.',
         'columns' => ['official.name' => 'Pejabat', 'year' => 'Tahun'],
         'fields' => [
             ['name' => 'official_id', 'label' => 'Pejabat', 'type' => 'relation', 'model' => Official::class, 'label_column' => 'name', 'rules' => 'required|exists:officials,id'],

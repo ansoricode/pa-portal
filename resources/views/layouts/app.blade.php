@@ -73,7 +73,7 @@
     </div>
 
     {{-- Navigasi 6 menu utama --}}
-    <nav class="navbar navbar-expand-xl bg-white py-2" aria-label="Navigasi Utama Website">
+    <nav class="navbar navbar-expand-xxl bg-white py-2" aria-label="Navigasi Utama Website">
         <div class="container-lg">
             <a class="navbar-brand d-flex align-items-center gap-3" href="{{ route('home') }}">
                 <img src="{{ $logo }}" alt="Logo {{ $siteName }}" style="height: 3.2rem; width: auto;" class="object-fit-contain">
@@ -88,7 +88,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav ms-auto mb-2 mb-xl-0 align-items-xl-center gap-1">
+                <ul class="navbar-nav ms-auto mb-2 mb-xxl-0 align-items-xxl-center gap-1">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
                     </li>
@@ -110,7 +110,7 @@
                         <a class="nav-link {{ request()->is('berita*') ? 'active' : '' }}" href="{{ route('news.index') }}">Berita &amp; Publikasi</a>
                     </li>
 
-                    <li class="nav-item ms-xl-2">
+                    <li class="nav-item ms-xxl-2">
                         <button class="btn btn-outline-success btn-sm d-flex align-items-center gap-1 rounded-pill px-3" type="button" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Buka Pencarian Internal">
                             <i class="bi bi-search"></i><span class="d-xl-none d-xxl-inline">Cari</span>
                         </button>

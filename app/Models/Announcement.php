@@ -8,7 +8,11 @@ class Announcement extends Model
 {
     protected $guarded = [];
 
-    protected $casts = ['published_at' => 'date', 'is_active' => 'boolean'];
+    protected $casts = [
+        'published_at' => 'date',
+        'is_active' => 'boolean',
+        'view_count' => 'integer',
+    ];
 
     public function getLinkAttribute(): string
     {

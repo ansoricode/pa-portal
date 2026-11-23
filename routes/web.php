@@ -36,8 +36,8 @@ Route::middleware(SecurityHeaders::class)->group(function () use ($loginPath, $a
 
         Route::get($loginPath, [AuthController::class, 'showLogin'])->name('login');
         Route::post($loginPath, [AuthController::class, 'login'])->middleware('throttle:20,1')->name('admin.login.submit');
-        Route::get($loginPath . '/verifikasi', [TwoFactorChallengeController::class, 'show'])->name('admin.2fa.challenge');
-        Route::post($loginPath . '/verifikasi', [TwoFactorChallengeController::class, 'verify'])->middleware('throttle:20,1')->name('admin.2fa.verify');
+        Route::get($loginPath.'/verifikasi', [TwoFactorChallengeController::class, 'show'])->name('admin.2fa.challenge');
+        Route::post($loginPath.'/verifikasi', [TwoFactorChallengeController::class, 'verify'])->middleware('throttle:20,1')->name('admin.2fa.verify');
 
         Route::prefix($adminPath)->middleware(['auth', EnsureSecurity::class])->name('admin.')->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -53,7 +53,7 @@ Route::middleware(SecurityHeaders::class)->group(function () use ($loginPath, $a
             Route::post('keamanan/2fa/nonaktifkan', [SecurityController::class, 'disable'])->middleware('throttle:10,1')->name('security.disable');
 
             // Khusus Super Admin
-            Route::middleware(RequirePermission::class . ':users')->group(function () {
+            Route::middleware(RequirePermission::class.':users')->group(function () {
                 Route::get('pengguna', [UserController::class, 'index'])->name('users.index');
                 Route::get('pengguna/tambah', [UserController::class, 'create'])->name('users.create');
                 Route::post('pengguna', [UserController::class, 'store'])->name('users.store');
@@ -62,10 +62,10 @@ Route::middleware(SecurityHeaders::class)->group(function () use ($loginPath, $a
                 Route::delete('pengguna/{user}', [UserController::class, 'destroy'])->whereNumber('user')->name('users.destroy');
                 Route::post('pengguna/{user}/reset-2fa', [UserController::class, 'reset2fa'])->whereNumber('user')->name('users.reset2fa');
             });
-            Route::get('log-aktivitas', [LogController::class, 'index'])->middleware(RequirePermission::class . ':logs')->name('logs');
+            Route::get('log-aktivitas', [LogController::class, 'index'])->middleware(RequirePermission::class.':logs')->name('logs');
 
             // Pengaturan situs
-            Route::middleware(RequirePermission::class . ':settings')->group(function () {
+            Route::middleware(RequirePermission::class.':settings')->group(function () {
                 Route::get('pengaturan', [SettingController::class, 'edit'])->name('settings');
                 Route::put('pengaturan', [SettingController::class, 'update'])->name('settings.update');
             });
@@ -100,6 +100,9 @@ Route::middleware(SecurityHeaders::class)->group(function () use ($loginPath, $a
         Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('news.show');
 
         Route::get('/pengumuman', [AnnouncementController::class, 'index'])->name('announcements.index');
+        Route::get('/pengumuman/{announcement}/kunjungi', [AnnouncementController::class, 'visit'])
+            ->whereNumber('announcement')
+            ->name('announcements.visit');
 
         Route::get('/cari', [SearchController::class, 'index'])->name('search');
 
