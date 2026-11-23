@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\News;
 use App\Support\Html;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -29,10 +30,21 @@ class ResourceController extends Controller
         return $def;
     }
 
+    protected function scopedQuery(array $def): Builder
+    {
+        $query = $def['model']::query();
+
+        foreach (($def['fixed'] ?? []) as $column => $value) {
+            $query->where($column, $value);
+        }
+
+        return $query;
+    }
+
     public function index(Request $request, string $resource)
     {
         $def = $this->def($resource);
-        $query = $def['model']::query();
+        $query = $this->scopedQuery($def);
 
         if (! empty($def['with'])) {
             $query->with($def['with']);
@@ -105,7 +117,7 @@ class ResourceController extends Controller
         $def = $this->def($resource);
         abort_if(($def['create'] ?? true) === false, 404);
 
-        $data = $this->collect($request, $def, null);
+        $data = array_replace($this->collect($request, $def, null), $def['fixed'] ?? []);
 
         try {
             $created = $def['model']::create($data);
@@ -127,7 +139,7 @@ class ResourceController extends Controller
 
         return view('admin.resource.form', [
             'def' => $def,
-            'item' => $def['model']::findOrFail($id),
+            'item' => $this->scopedQuery($def)->findOrFail($id),
             'newsOptions' => $def['key'] === 'announcements'
                 ? News::published()->orderByDesc('published_at')->get(['title', 'slug'])
                 : collect(),
@@ -139,14 +151,14 @@ class ResourceController extends Controller
         $def = $this->def($resource);
         abort_if(($def['edit'] ?? true) === false, 404);
 
-        $item = $def['model']::findOrFail($id);
+        $item = $this->scopedQuery($def)->findOrFail($id);
         $existingMedia = [];
         foreach ($def['fields'] as $field) {
             if ($field['type'] === 'images') {
                 $existingMedia[$field['name']] = array_values(array_filter((array) $item->{$field['name']}));
             }
         }
-        $data = $this->collect($request, $def, $item);
+        $data = array_replace($this->collect($request, $def, $item), $def['fixed'] ?? []);
         $newMedia = [];
         foreach ($existingMedia as $name => $paths) {
             $newMedia[$name] = array_values(array_diff((array) ($data[$name] ?? []), $paths));
@@ -178,7 +190,7 @@ class ResourceController extends Controller
     public function destroy(string $resource, int $id)
     {
         $def = $this->def($resource);
-        $item = $def['model']::findOrFail($id);
+        $item = $this->scopedQuery($def)->findOrFail($id);
         $mediaToDelete = [];
 
         foreach ($def['fields'] as $f) {

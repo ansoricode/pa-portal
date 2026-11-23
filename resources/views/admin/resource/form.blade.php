@@ -3,7 +3,12 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h4 fw-bold mb-0">{{ $item ? 'Ubah' : 'Tambah' }} {{ $def['label'] }}</h1>
-    <a href="{{ route('admin.resource.index', $def['key']) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
+    <div class="d-flex gap-2">
+        @if($item && $def['key'] === 'pages' && $item->section === 'transparansi' && $item->slug === 'sakip' && auth()->user()->canManage('sakip_documents'))
+            <a href="{{ route('admin.resource.index', 'sakip_documents') }}" class="btn btn-sm btn-outline-success"><i class="bi bi-folder2-open me-1"></i>Kelola Dokumen SAKIP</a>
+        @endif
+        <a href="{{ route('admin.resource.index', $def['key']) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
+    </div>
 </div>
 
 @if($errors->any() && ! $errors->has('db'))<div class="alert alert-danger">Terdapat isian yang perlu diperbaiki.</div>@endif

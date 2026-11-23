@@ -10,7 +10,8 @@
                 <span>
                     {{ $documents->firstItem() + $loop->index }}. {{ $doc->title }}
                     @if($doc->year)<span class="badge bg-light text-dark border ms-1">{{ $doc->year }}</span>@endif
-                    @if($doc->description)<small class="d-block text-secondary">{{ $doc->description }}</small>@endif
+                    @if($doc->period)<small class="d-block text-secondary">Periode: {{ $doc->period }}</small>
+                    @elseif($doc->description)<small class="d-block text-secondary">{{ $doc->description }}</small>@endif
                 </span>
                 @if($doc->url)
                     <a href="{{ $doc->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm {{ $btnClass }} text-nowrap">{{ $btnText }}</a>

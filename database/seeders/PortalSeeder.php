@@ -225,14 +225,14 @@ class PortalSeeder extends Seeder
         ];
 
         $order = [];
-        foreach ($rows as [$cat, $title, $desc]) {
+        foreach ($rows as [$cat, $title, $period]) {
             $order[$cat] = ($order[$cat] ?? 0) + 1;
             Document::create([
-                'category'    => $cat,
-                'title'       => $title,
-                'description' => $desc ? "Periode: $desc" : null,
-                'sort_order'  => $order[$cat],
-                'is_active'   => true,
+                'category' => $cat,
+                'title' => $title,
+                'period' => $period,
+                'sort_order' => $order[$cat],
+                'is_active' => true,
                 // Unggah berkas / isi tautan melalui panel admin; tombol muncul setelah berkas tersedia.
             ]);
         }

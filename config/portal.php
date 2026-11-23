@@ -116,7 +116,7 @@ return [
     'roles' => [
         'superadmin' => ['label' => 'Super Admin',          'resources' => '*', 'settings' => true,  'users' => true,  'logs' => true],
         'admin' => ['label' => 'Admin Konten',         'resources' => '*', 'settings' => true,  'users' => false, 'logs' => false],
-        'editor' => ['label' => 'Editor Berita & Beranda', 'resources' => ['news', 'announcements', 'sliders', 'shortcuts', 'pages'], 'settings' => false, 'users' => false, 'logs' => false],
-        'operator' => ['label' => 'Operator Kepaniteraan/Kesekretariatan', 'resources' => ['court_schedules', 'panggilan_ghaib', 'documents', 'jurisdictions', 'officials', 'lhkpn_reports', 'survey_indices'], 'settings' => false, 'users' => false, 'logs' => false],
+        'editor' => ['label' => 'Editor Berita & Beranda', 'resources' => ['news', 'announcements', 'sliders', 'shortcuts', 'pages', 'sakip_documents'], 'settings' => false, 'users' => false, 'logs' => false],
+        'operator' => ['label' => 'Operator Kepaniteraan/Kesekretariatan', 'resources' => ['court_schedules', 'panggilan_ghaib', 'documents', 'sakip_documents', 'jurisdictions', 'officials', 'lhkpn_reports', 'survey_indices'], 'settings' => false, 'users' => false, 'logs' => false],
     ],
 ];

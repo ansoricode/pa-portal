@@ -146,17 +146,35 @@ return [
         ],
     ],
 
+    'sakip_documents' => [
+        'group' => 'Dokumen', 'label' => 'Dokumen SAKIP', 'icon' => 'bi-clipboard-data',
+        'model' => Document::class, 'fixed' => ['category' => 'sakip'],
+        'order' => ['sort_order', 'asc'], 'search' => ['title', 'period'],
+        'filters' => ['is_active' => ['label' => 'Status', 'options' => ['1' => 'Aktif', '0' => 'Nonaktif']]],
+        'hint' => 'Kelola tujuh jenis dokumen SAKIP. Unggah berkas atau isi tautan; dokumen tanpa berkas/tautan tetap tampil sebagai "Segera tersedia".',
+        'columns' => ['title' => 'Nama Dokumen', 'period' => 'Periode', 'sort_order' => 'Urutan', 'is_active' => 'Aktif'],
+        'fields' => [
+            ['name' => 'title', 'label' => 'Nama Dokumen', 'type' => 'text', 'rules' => 'required|string|max:255'],
+            ['name' => 'period', 'label' => 'Periode', 'type' => 'text', 'rules' => 'required|string|max:30', 'help' => 'Contoh: 2022–2026 atau 2025.'],
+            ['name' => 'file_path', 'label' => 'Unggah Berkas', 'type' => 'file', 'rules' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,jpg,jpeg,png|max:20480'],
+            ['name' => 'external_url', 'label' => 'atau Tautan Dokumen', 'type' => 'text', 'rules' => 'nullable|url|max:255', 'help' => 'Isi salah satu: unggah berkas atau tautan eksternal. Keduanya boleh dikosongkan untuk draf.'],
+            ['name' => 'sort_order', 'label' => 'Urutan', 'type' => 'number', 'default' => 0, 'rules' => 'nullable|integer|min:0'],
+            ['name' => 'is_active', 'label' => 'Tampilkan di halaman publik', 'type' => 'checkbox', 'default' => true],
+        ],
+    ],
+
     'documents' => [
         'group' => 'Dokumen', 'label' => 'Dokumen & Laporan', 'icon' => 'bi-folder2-open',
-        'model' => Document::class, 'order' => ['category', 'asc'], 'search' => ['title', 'category'],
+        'model' => Document::class, 'order' => ['category', 'asc'], 'search' => ['title', 'category', 'period'],
         'filters' => ['category' => ['label' => 'Kategori', 'options_config' => 'portal.document_categories'], 'is_active' => ['label' => 'Status', 'options' => ['1' => 'Aktif', '0' => 'Nonaktif']]],
         'hint' => 'SAKIP, laporan keuangan, RUP, SK panjar, prosedur berperkara, statistik, PPID, dan pengaduan. Dokumen tampil otomatis di halaman sesuai kategori.',
-        'columns' => ['category' => 'Kategori', 'title' => 'Judul', 'year' => 'Tahun', 'is_active' => 'Aktif'],
+        'columns' => ['category' => 'Kategori', 'title' => 'Judul', 'year' => 'Tahun', 'period' => 'Periode', 'is_active' => 'Aktif'],
         'fields' => [
             ['name' => 'category', 'label' => 'Kategori', 'type' => 'select', 'options_config' => 'portal.document_categories', 'rules' => 'required|string|max:50'],
             ['name' => 'title', 'label' => 'Judul Dokumen', 'type' => 'text', 'rules' => 'required|string|max:255'],
             ['name' => 'description', 'label' => 'Keterangan', 'type' => 'textarea', 'rules' => 'nullable|string|max:1000'],
             ['name' => 'year', 'label' => 'Tahun', 'type' => 'number', 'rules' => 'nullable|integer|min:2000|max:2100'],
+            ['name' => 'period', 'label' => 'Periode (opsional)', 'type' => 'text', 'rules' => 'nullable|string|max:30'],
             ['name' => 'file_path', 'label' => 'Berkas (PDF/Office/ZIP)', 'type' => 'file'],
             ['name' => 'external_url', 'label' => 'atau Tautan Eksternal', 'type' => 'text', 'rules' => 'nullable|url|max:255'],
             ['name' => 'sort_order', 'label' => 'Urutan', 'type' => 'number', 'default' => 0, 'rules' => 'nullable|integer|min:0'],
