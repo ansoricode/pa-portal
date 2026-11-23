@@ -111,10 +111,34 @@
             <p class="text-white-50 mx-auto" style="max-width: 40rem;">Transparansi hasil survei pelayanan publik sebagai komitmen peningkatan kualitas layanan peradilan.</p>
         </div>
         @include('public.partials.indices', ['indices' => $indices])
-        <div class="text-center pt-3">
+        <div class="pt-3">
+            <div class="survey-official-card mx-auto mb-4 rounded-4 p-3 p-md-4 text-start">
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="survey-official-icon" aria-hidden="true">
+                            <i class="bi bi-patch-check-fill fs-4"></i>
+                        </span>
+                        <div>
+                            <span class="badge rounded-pill bg-success-subtle text-success-emphasis">Survei Resmi Ditjen Badilag &bull; SURVELAG</span>
+                            <h3 class="h5 fw-bold text-dark mt-2 mb-1">Survei Kepuasan Layanan</h3>
+                            <p class="small text-secondary mb-0">Sampaikan penilaian layanan PA Kodya Kediri melalui sistem survei resmi Badilag.</p>
+                        </div>
+                    </div>
+                    <a href="https://survei.badilag.net/s/c948693eed67bdcfec6ca939896d87b1"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="Isi survei resmi Badilag, membuka tab baru"
+                       class="btn btn-pa-primary text-nowrap align-self-start align-self-md-center">
+                        Isi Survei Badilag <i class="bi bi-box-arrow-up-right ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
             <button type="button" class="btn btn-pa-secondary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#survey-modal">
-                <i class="bi bi-pencil-square me-2"></i>Isi Survei Pelayanan Publik
+                <i class="bi bi-chat-square-text me-2"></i>Beri Masukan untuk Pelayanan Kami
             </button>
+            <p class="small text-white-50 mt-2 mb-0">Formulir internal portal untuk penilaian layanan PTSP dan website.</p>
         </div>
     </div>
 </section>

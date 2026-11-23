@@ -219,10 +219,11 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-pa-primary text-white">
-                <h5 class="modal-title font-display fw-bold" id="surveyModalLabel">Survei Pelayanan Publik Terpadu</h5>
+                <h5 class="modal-title font-display fw-bold" id="surveyModalLabel">Masukan Internal PTSP &amp; Website</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
+                <p class="small text-secondary">Formulir internal portal ini tidak menggantikan survei resmi Ditjen Badilag.</p>
                 <form method="POST" action="{{ route('survey.store') }}">
                     @csrf
                     <div class="mb-3">

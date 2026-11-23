@@ -56,6 +56,24 @@
             color: #ffffff;
         }
 
+        .survey-official-card {
+            max-width: 56rem;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background-color: #ffffff;
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12);
+        }
+        .survey-official-icon {
+            display: inline-flex;
+            width: 3.25rem;
+            height: 3.25rem;
+            flex: 0 0 3.25rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            background-color: var(--pa-primary-light);
+            color: var(--pa-primary);
+        }
+
         /* Tipografi */
         .font-display { font-family: 'Montserrat', sans-serif; }
 
