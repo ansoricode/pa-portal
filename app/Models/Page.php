@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Page extends Model
+{
+    protected $guarded = [];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'media' => 'array',
+    ];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
+}

@@ -1,0 +1,92 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\News;
+use App\Models\Page;
+use App\Models\Setting;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
+
+class SettingsSeoTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_admin_can_save_seo_settings_and_public_pages_render_metadata(): void
+    {
+        config(['portal.require_2fa' => false]);
+        Storage::fake('public');
+        $admin = User::factory()->create([
+            'role' => 'superadmin',
+            'is_active' => true,
+            'must_change_password' => false,
+        ]);
+        Page::create([
+            'section' => 'profil',
+            'slug' => 'tupoksi',
+            'title' => 'Tugas Pokok dan Fungsi',
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.settings'))
+            ->assertOk()
+            ->assertSee('SEO & Tampilan')
+            ->assertSee('Favicon Situs (PNG/ICO)');
+
+        $this->put(route('admin.settings.update'), [
+            'site_name' => 'Pengadilan Agama Contoh',
+            'seo_title' => 'Portal Resmi Pengadilan Agama Contoh',
+            'site_description' => 'Informasi resmi dan layanan Pengadilan Agama Contoh.',
+            'seo_keywords' => 'pengadilan agama, layanan publik',
+            'favicon' => UploadedFile::fake()->image('favicon.png', 32, 32),
+            'og_image' => UploadedFile::fake()->image('pratinjau.png', 1200, 630),
+        ])->assertRedirect();
+
+        $faviconPath = Setting::get('favicon');
+        $ogImagePath = Setting::get('og_image');
+        Storage::disk('public')->assertExists($faviconPath);
+        Storage::disk('public')->assertExists($ogImagePath);
+
+        $this->get(route('page.show', ['section' => 'profil', 'slug' => 'tupoksi']))
+            ->assertOk()
+            ->assertSee('<title>Tugas Pokok dan Fungsi | Portal Resmi Pengadilan Agama Contoh</title>', false)
+            ->assertSee('<meta name="description" content="Informasi resmi dan layanan Pengadilan Agama Contoh.">', false)
+            ->assertSee('<meta name="keywords" content="pengadilan agama, layanan publik">', false)
+            ->assertSee('<link rel="icon" href="'.asset('storage/'.$faviconPath).'" type="image/png">', false)
+            ->assertSee('<meta property="og:image" content="'.asset('storage/'.$ogImagePath).'">', false);
+
+        News::create([
+            'title' => 'Berita Uji SEO',
+            'slug' => 'berita-uji-seo',
+            'excerpt' => 'Ringkasan berita yang digunakan pada metadata.',
+            'content' => '<p>Isi berita untuk pengujian metadata.</p>',
+            'image' => $ogImagePath,
+            'published_at' => now(),
+            'is_published' => true,
+        ]);
+        $this->get(route('news.show', 'berita-uji-seo'))
+            ->assertOk()
+            ->assertSee('<title>Berita Uji SEO | Portal Resmi Pengadilan Agama Contoh</title>', false)
+            ->assertSee('<meta name="description" content="Ringkasan berita yang digunakan pada metadata.">', false)
+            ->assertSee('<meta property="og:type" content="article">', false)
+            ->assertSee('<meta property="og:image" content="'.asset('storage/'.$ogImagePath).'">', false);
+    }
+
+    public function test_favicon_upload_rejects_non_image_files(): void
+    {
+        config(['portal.require_2fa' => false]);
+        $admin = User::factory()->create([
+            'role' => 'superadmin',
+            'is_active' => true,
+            'must_change_password' => false,
+        ]);
+
+        $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'favicon' => UploadedFile::fake()->create('favicon.txt', 1, 'text/plain'),
+        ])->assertSessionHasErrors('favicon');
+    }
+}
