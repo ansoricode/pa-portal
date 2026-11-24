@@ -89,6 +89,78 @@
             overflow-wrap: anywhere;
         }
 
+        .topbar-shell,
+        .topbar-contact,
+        .topbar-actions,
+        .topbar-social {
+            flex-wrap: nowrap;
+        }
+
+        .topbar-shell {
+            min-width: 0;
+            white-space: nowrap;
+        }
+
+        .topbar-contact {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-actions {
+            flex: 0 0 auto;
+        }
+
+        .topbar-social {
+            flex: 0 0 auto;
+        }
+
+        .topbar-social-more {
+            line-height: 1;
+            vertical-align: middle;
+            text-decoration: none;
+        }
+
+        .topbar-social-menu {
+            min-width: 12rem;
+            margin-top: 0.35rem !important;
+        }
+
+        @media (max-width: 767.98px) {
+            .topbar-shell {
+                gap: 0.5rem !important;
+            }
+
+            .topbar-label,
+            .topbar-separator {
+                display: none;
+            }
+
+            .topbar-actions {
+                gap: 0.55rem !important;
+            }
+
+            .topbar-social {
+                gap: 0.55rem !important;
+            }
+
+            .topbar-link {
+                display: inline-flex;
+                align-items: center;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .topbar-contact {
+                max-width: 8rem;
+            }
+
+            .topbar-social {
+                gap: 0.35rem !important;
+            }
+        }
+
         @media (min-width: 1600px) {
             header > .bg-pa-primary > .container-lg,
             .navbar-expand-wide > .container-lg {

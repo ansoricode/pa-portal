@@ -67,24 +67,29 @@
 <header class="sticky-top shadow-sm bg-white">
     {{-- Top bar kontak --}}
     <div class="bg-pa-primary text-white py-1" style="font-size: 0.85rem;">
-        <div class="container-lg d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <div class="d-flex align-items-center gap-3">
+        <div class="container-lg d-flex justify-content-between align-items-center gap-2 topbar-shell">
+            <div class="d-flex align-items-center gap-3 topbar-contact">
                 @if($setting('phone'))<span><i class="bi bi-telephone-fill text-pa-secondary me-1"></i> {{ $setting('phone') }}</span>@endif
                 @if($setting('email'))<span class="d-none d-md-inline"><i class="bi bi-envelope-fill text-pa-secondary me-1"></i> {{ $setting('email') }}</span>@endif
                 <span class="d-none d-lg-inline"><i class="bi bi-shield-lock-fill text-pa-secondary me-1"></i> Portal Resmi Terverifikasi (.go.id)</span>
             </div>
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2 gap-md-3 topbar-actions">
                 @if($whatsappUrl)
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold">
-                        <i class="bi bi-whatsapp text-pa-secondary me-1"></i> WhatsApp PTSP
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold topbar-link" aria-label="WhatsApp PTSP" title="WhatsApp PTSP">
+                        <i class="bi bi-whatsapp text-pa-secondary me-md-1"></i><span class="topbar-label">WhatsApp PTSP</span>
                     </a>
                 @endif
-                <a href="{{ $setting('siwas_url', 'https://siwas.mahkamahagung.go.id') }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold">
-                    <i class="bi bi-megaphone-fill text-pa-secondary me-1"></i> SIWAS MARI
+                <a href="{{ $setting('siwas_url', 'https://siwas.mahkamahagung.go.id') }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold topbar-link" aria-label="SIWAS MARI" title="SIWAS MARI">
+                    <i class="bi bi-megaphone-fill text-pa-secondary me-md-1"></i><span class="topbar-label">SIWAS MARI</span>
                 </a>
-                <span class="text-white-50">|</span>
-                <div class="d-flex gap-2">
-                    @foreach($footerSocial as $social)
+                <span class="text-white-50 topbar-separator">|</span>
+                <div class="d-flex gap-2 topbar-social">
+                    @php
+                        $topbarSocial = collect($footerSocial);
+                        $topbarPrimary = $topbarSocial->take(3);
+                        $topbarOverflow = $topbarSocial->slice(3);
+                    @endphp
+                    @foreach($topbarPrimary as $social)
                         @php
                             $headerSocialIcon = strtolower(trim((string) ($social['icon'] ?? '')));
                             $headerSocialName = strtolower(trim((string) ($social['name'] ?? '')));
@@ -100,15 +105,52 @@
                                 'whatsapp' => 'bi-whatsapp',
                                 'telegram' => 'bi-telegram',
                                 'linkedin' => 'bi-linkedin',
+                                'threads' => 'bi-threads',
                             ];
                             $headerSocialIcon = str_starts_with($headerSocialIcon, 'bi-')
                                 ? $headerSocialIcon
                                 : ($headerKnownIcons[$headerSocialName] ?? ($headerKnownIcons[$headerSocialIcon] ?? 'bi-link-45deg'));
                         @endphp
                         <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="{{ $social['name'] }}" title="{{ $social['name'] }}" class="text-white">
-                            <i class="{{ $headerSocialIcon }}"></i>
+                            <i class="bi {{ $headerSocialIcon }}"></i>
                         </a>
                     @endforeach
+                    @if($topbarOverflow->isNotEmpty())
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-link text-white p-0 border-0 topbar-social-more" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Media sosial lainnya" title="Media sosial lainnya">
+                                <i class="bi bi-three-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-1 topbar-social-menu">
+                                @foreach($topbarOverflow as $social)
+                                    @php
+                                        $overflowIcon = strtolower(trim((string) ($social['icon'] ?? '')));
+                                        $overflowName = strtolower(trim((string) ($social['name'] ?? '')));
+                                        $overflowKnownIcons = [
+                                            'facebook' => 'bi-facebook',
+                                            'instagram' => 'bi-instagram',
+                                            'youtube' => 'bi-youtube',
+                                            'tiktok' => 'bi-tiktok',
+                                            'twitter' => 'bi-twitter-x',
+                                            'x' => 'bi-twitter-x',
+                                            'whatsapp' => 'bi-whatsapp',
+                                            'telegram' => 'bi-telegram',
+                                            'linkedin' => 'bi-linkedin',
+                                            'threads' => 'bi-threads',
+                                        ];
+                                        $overflowIcon = str_starts_with($overflowIcon, 'bi-')
+                                            ? $overflowIcon
+                                            : ($overflowKnownIcons[$overflowName] ?? 'bi-link-45deg');
+                                    @endphp
+                                    <li>
+                                        <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" class="dropdown-item d-flex align-items-center gap-2">
+                                            <i class="bi {{ $overflowIcon }}"></i>
+                                            <span>{{ $social['name'] }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

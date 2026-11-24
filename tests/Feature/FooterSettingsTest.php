@@ -69,6 +69,20 @@ class FooterSettingsTest extends TestCase
                         'sort_order' => 20,
                         'is_active' => '1',
                     ],
+                    [
+                        'name' => 'X',
+                        'url' => 'https://x.com/pacontoh',
+                        'icon' => 'bi-twitter-x',
+                        'sort_order' => 30,
+                        'is_active' => '1',
+                    ],
+                    [
+                        'name' => 'Threads',
+                        'url' => 'https://threads.net/@pacontoh',
+                        'icon' => 'bi-threads',
+                        'sort_order' => 40,
+                        'is_active' => '1',
+                    ],
                 ],
                 'footer_links' => [
                     [
@@ -120,6 +134,7 @@ class FooterSettingsTest extends TestCase
             ->assertSee('bi-bank')
             ->assertSee('bi-tiktok')
             ->assertSee('bi-facebook')
+            ->assertSee('topbar-social-more')
             ->assertDontSee('<span class="small">FB</span>', false)
             ->assertSee('Senin-Jumat, 08.00-16.00 WIB');
 
