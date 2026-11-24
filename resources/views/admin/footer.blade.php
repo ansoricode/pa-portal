@@ -21,10 +21,33 @@
                     <label class="form-label fw-semibold" for="footer_copyright">Hak Cipta / Teks Bawah Footer</label>
                     <textarea id="footer_copyright" name="footer_copyright" rows="3" class="form-control">{{ old('footer_copyright', $footerCopyright ?: '&copy; '.date('Y').' '.$setting('site_name', 'Portal Satker').'. Semua hak dilindungi.') }}</textarea>
                 </div>
-                <div class="col-md-4"><label class="form-label fw-semibold">Facebook</label><input type="url" name="facebook_url" value="{{ old('facebook_url', $setting('facebook_url')) }}" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label fw-semibold">Instagram</label><input type="url" name="instagram_url" value="{{ old('instagram_url', $setting('instagram_url')) }}" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label fw-semibold">YouTube</label><input type="url" name="youtube_url" value="{{ old('youtube_url', $setting('youtube_url')) }}" class="form-control"></div>
+                <div class="col-md-4"><label class="form-label fw-semibold" for="footer_links_title">Judul Tautan Footer</label><input id="footer_links_title" type="text" name="footer_links_title" value="{{ old('footer_links_title', $footerLinksTitle) }}" maxlength="150" class="form-control"></div>
+                <div class="col-md-4"><label class="form-label fw-semibold" for="footer_ecosystem_title">Judul Ekosistem Peradilan</label><input id="footer_ecosystem_title" type="text" name="footer_ecosystem_title" value="{{ old('footer_ecosystem_title', $footerEcosystemTitle) }}" maxlength="150" class="form-control"></div>
+                <div class="col-md-4"><label class="form-label fw-semibold" for="footer_stats_title">Judul Statistik Kunjungan</label><input id="footer_stats_title" type="text" name="footer_stats_title" value="{{ old('footer_stats_title', $footerStatsTitle) }}" maxlength="150" class="form-control"></div>
             </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong style="color:#056e4f">Media Sosial Footer</strong>
+            <button type="button" class="btn btn-sm btn-outline-success" data-add-row="social-links"><i class="bi bi-plus-lg me-1"></i>Tambah Media Sosial</button>
+        </div>
+        <div class="card-body" id="social-links">
+            @foreach(old('social_links', $socialLinks) as $index => $link)
+                <div class="border rounded p-3 mb-3 social-link-row">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-3"><label class="form-label">Nama</label><input type="text" name="social_links[{{ $index }}][name]" value="{{ $link['name'] ?? '' }}" class="form-control" required></div>
+                        <div class="col-md-4"><label class="form-label">URL</label><input type="url" name="social_links[{{ $index }}][url]" value="{{ $link['url'] ?? '' }}" class="form-control" required></div>
+                        <div class="col-md-2"><label class="form-label">Ikon Bootstrap</label><input type="text" name="social_links[{{ $index }}][icon]" value="{{ $link['icon'] ?? '' }}" class="form-control" placeholder="bi-facebook"></div>
+                        <div class="col-md-1"><label class="form-label">Urutan</label><input type="number" name="social_links[{{ $index }}][sort_order]" value="{{ $link['sort_order'] ?? 0 }}" min="0" class="form-control"></div>
+                        <div class="col-md-2 d-flex gap-2">
+                            <div class="form-check mb-2"><input type="checkbox" name="social_links[{{ $index }}][is_active]" value="1" id="social-active-{{ $index }}" class="form-check-input" @checked($link['is_active'] ?? true)><label class="form-check-label" for="social-active-{{ $index }}">Aktif</label></div>
+                            <button type="button" class="btn btn-sm btn-outline-danger ms-auto mb-2" data-remove-row><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 
@@ -66,7 +89,8 @@
                         <div class="col-md-4"><label class="form-label">URL</label><input type="url" name="ecosystem_links[{{ $index }}][url]" value="{{ $link['url'] ?? '' }}" class="form-control" required></div>
                         <div class="col-md-1"><label class="form-label">Urutan</label><input type="number" name="ecosystem_links[{{ $index }}][sort_order]" value="{{ $link['sort_order'] ?? 0 }}" min="0" class="form-control"></div>
                         <div class="col-md-3 d-flex gap-2"><div class="form-check mb-2"><input type="checkbox" name="ecosystem_links[{{ $index }}][is_active]" value="1" id="ecosystem-active-{{ $index }}" class="form-check-input" @checked($link['is_active'] ?? true)><label class="form-check-label" for="ecosystem-active-{{ $index }}">Aktif</label></div><button type="button" class="btn btn-sm btn-outline-danger ms-auto mb-2" data-remove-row><i class="bi bi-trash"></i></button></div>
-                        <div class="col-md-10"><label class="form-label">Logo</label><input type="file" name="ecosystem_links[{{ $index }}][logo_file]" accept="image/png,image/jpeg,image/webp" class="form-control"></div>
+                        <div class="col-md-5"><label class="form-label">Ikon Bootstrap</label><input type="text" name="ecosystem_links[{{ $index }}][icon]" value="{{ $link['icon'] ?? '' }}" class="form-control" placeholder="Contoh: bi-bank"></div>
+                        <div class="col-md-5"><label class="form-label">Logo/Gambar</label><input type="file" name="ecosystem_links[{{ $index }}][logo_file]" accept="image/png,image/jpeg,image/webp" class="form-control"></div>
                         @if(! empty($link['logo']))<div class="col-md-2"><img src="{{ asset('storage/'.$link['logo']) }}" alt="" style="height:45px" class="border rounded p-1"></div>@endif
                     </div>
                 </div>
@@ -97,19 +121,37 @@
             <div class="col-md-4"><label class="form-label">URL</label><input type="url" name="ecosystem_links[__INDEX__][url]" class="form-control" required></div>
             <div class="col-md-1"><label class="form-label">Urutan</label><input type="number" name="ecosystem_links[__INDEX__][sort_order]" value="0" min="0" class="form-control"></div>
             <div class="col-md-3 d-flex"><div class="form-check mb-2"><input type="checkbox" name="ecosystem_links[__INDEX__][is_active]" value="1" class="form-check-input" checked><label class="form-check-label ms-1">Aktif</label></div><button type="button" class="btn btn-sm btn-outline-danger ms-auto mb-2" data-remove-row><i class="bi bi-trash"></i></button></div>
-            <div class="col-md-12"><label class="form-label">Logo</label><input type="file" name="ecosystem_links[__INDEX__][logo_file]" accept="image/png,image/jpeg,image/webp" class="form-control"></div>
+            <div class="col-md-5"><label class="form-label">Ikon Bootstrap</label><input type="text" name="ecosystem_links[__INDEX__][icon]" class="form-control" placeholder="bi-bank"></div>
+            <div class="col-md-5"><label class="form-label">Logo/Gambar</label><input type="file" name="ecosystem_links[__INDEX__][logo_file]" accept="image/png,image/jpeg,image/webp" class="form-control"></div>
+        </div>
+    </div>
+</template>
+<template id="social-link-template">
+    <div class="border rounded p-3 mb-3 social-link-row">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-3"><label class="form-label">Nama</label><input type="text" name="social_links[__INDEX__][name]" class="form-control" required></div>
+            <div class="col-md-4"><label class="form-label">URL</label><input type="url" name="social_links[__INDEX__][url]" class="form-control" required></div>
+            <div class="col-md-2"><label class="form-label">Ikon Bootstrap</label><input type="text" name="social_links[__INDEX__][icon]" class="form-control" placeholder="bi-facebook"></div>
+            <div class="col-md-1"><label class="form-label">Urutan</label><input type="number" name="social_links[__INDEX__][sort_order]" value="0" min="0" class="form-control"></div>
+            <div class="col-md-2 d-flex"><div class="form-check mb-2"><input type="checkbox" name="social_links[__INDEX__][is_active]" value="1" class="form-check-input" checked><label class="form-check-label ms-1">Aktif</label></div><button type="button" class="btn btn-sm btn-outline-danger ms-auto mb-2" data-remove-row><i class="bi bi-trash"></i></button></div>
         </div>
     </div>
 </template>
 @endsection
 @push('scripts')
-<script>
+<script nonce="{{ $cspNonce ?? '' }}">
 document.querySelectorAll('[data-add-row]').forEach(function(button) {
     button.addEventListener('click', function() {
         var kind = button.dataset.addRow;
         var container = document.getElementById(kind);
-        var template = document.getElementById(kind === 'footer-links' ? 'footer-link-template' : 'ecosystem-link-template');
-        var index = container.querySelectorAll(kind === 'footer-links' ? '.footer-link-row' : '.ecosystem-link-row').length;
+        var templateMap = {
+            'footer-links': ['footer-link-template', '.footer-link-row'],
+            'ecosystem-links': ['ecosystem-link-template', '.ecosystem-link-row'],
+            'social-links': ['social-link-template', '.social-link-row']
+        };
+        var templateConfig = templateMap[kind];
+        var template = document.getElementById(templateConfig[0]);
+        var index = container.querySelectorAll(templateConfig[1]).length;
         container.insertAdjacentHTML('beforeend', template.innerHTML.replaceAll('__INDEX__', index));
     });
 });

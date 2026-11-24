@@ -65,6 +65,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+@stack('scripts')
 <script nonce="{{ $cspNonce ?? '' }}">
     // Editor teks kaya (Quill): salin HTML ke textarea tersembunyi saat form dikirim
     document.querySelectorAll('.quill-editor').forEach(function (el) {

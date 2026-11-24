@@ -26,15 +26,42 @@ class FooterSettingsTest extends TestCase
         $this->actingAs($superadmin)
             ->get(route('admin.footer.edit'))
             ->assertOk()
-            ->assertSee('Pengaturan Footer');
+            ->assertSee('Pengaturan Footer')
+            ->assertSee('Judul Tautan Footer')
+            ->assertSee('Judul Ekosistem Peradilan')
+            ->assertSee('Judul Statistik Kunjungan')
+            ->assertSee('Media Sosial Footer')
+            ->assertSee('data-add-row="social-links"', false)
+            ->assertSee('data-add-row="footer-links"', false)
+            ->assertSee('data-add-row="ecosystem-links"', false)
+            ->assertSee("document.querySelectorAll('[data-add-row]')", false);
 
         $this->actingAs($superadmin)
             ->put(route('admin.footer.update'), [
                 'footer_hours' => 'Senin-Jumat, 08.00-16.00 WIB',
                 'footer_copyright' => '&copy; 2026 Pengadilan Agama Contoh',
+                'footer_links_title' => 'Tautan Pilihan',
+                'footer_ecosystem_title' => 'Ekosistem Peradilan',
+                'footer_stats_title' => 'Jumlah Pengunjung',
                 'facebook_url' => 'https://facebook.com/pacontoh',
                 'instagram_url' => 'https://instagram.com/pacontoh',
                 'youtube_url' => 'https://youtube.com/@pacontoh',
+                'social_links' => [
+                    [
+                        'name' => 'TikTok',
+                        'url' => 'https://tiktok.com/@pacontoh',
+                        'icon' => 'bi-tiktok',
+                        'sort_order' => 10,
+                        'is_active' => '1',
+                    ],
+                    [
+                        'name' => 'Facebook',
+                        'url' => 'https://facebook.com/pacontoh',
+                        'icon' => 'FB',
+                        'sort_order' => 20,
+                        'is_active' => '1',
+                    ],
+                ],
                 'footer_links' => [
                     [
                         'name' => 'Layanan Informasi',
@@ -50,9 +77,9 @@ class FooterSettingsTest extends TestCase
                     [
                         'name' => 'Ekosistem Uji',
                         'url' => 'https://ecosystem.go.id',
+                        'icon' => 'bi-bank',
                         'sort_order' => 1,
                         'is_active' => '1',
-                        'logo_file' => UploadedFile::fake()->image('logo.png', 40, 40),
                     ],
                 ],
             ])
@@ -60,17 +87,32 @@ class FooterSettingsTest extends TestCase
 
         $links = json_decode((string) Setting::get('footer_links'), true);
         $ecosystem = json_decode((string) Setting::get('footer_ecosystem'), true);
+        $social = json_decode((string) Setting::get('footer_social'), true);
 
         $this->assertSame('Senin-Jumat, 08.00-16.00 WIB', Setting::get('footer_hours'));
+        $this->assertSame('Tautan Pilihan', Setting::get('footer_links_title'));
+        $this->assertSame('Ekosistem Peradilan', Setting::get('footer_ecosystem_title'));
+        $this->assertSame('Jumlah Pengunjung', Setting::get('footer_stats_title'));
+        $this->assertSame('TikTok', $social[0]['name']);
+        $this->assertSame('https://facebook.com/pacontoh', Setting::get('facebook_url'));
         $this->assertSame('Layanan Informasi', $links[0]['name']);
         Storage::disk('public')->assertExists($links[0]['icon']);
         $this->assertSame('Ekosistem Uji', $ecosystem[0]['name']);
-        Storage::disk('public')->assertExists($ecosystem[0]['logo']);
+        $this->assertSame('bi-bank', $ecosystem[0]['icon']);
+        $this->assertSame('', $ecosystem[0]['logo']);
 
         $this->get(route('home'))
             ->assertOk()
             ->assertSee('Layanan Informasi')
             ->assertSee('Ekosistem Uji')
+            ->assertSee('Tautan Pilihan')
+            ->assertSee('Ekosistem Peradilan')
+            ->assertSee('Jumlah Pengunjung')
+            ->assertSee('TikTok')
+            ->assertSee('bi-bank')
+            ->assertSee('bi-tiktok')
+            ->assertSee('bi-facebook')
+            ->assertDontSee('<span class="small">FB</span>', false)
             ->assertSee('Senin-Jumat, 08.00-16.00 WIB');
     }
 

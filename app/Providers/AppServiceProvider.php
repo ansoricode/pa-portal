@@ -56,6 +56,11 @@ class AppServiceProvider extends ServiceProvider
                     ['name' => 'JDIH Mahkamah Agung RI', 'url' => 'https://jdih.mahkamahagung.go.id', 'logo' => '', 'sort_order' => 30, 'is_active' => true],
                     ['name' => 'SIMTEPA Badilag', 'url' => 'https://simtepa.badilag.net', 'logo' => '', 'sort_order' => 40, 'is_active' => true],
                 ]),
+                'footerSocial' => $decodeFooter('footer_social', array_values(array_filter([
+                    Setting::get('facebook_url') ? ['name' => 'Facebook', 'url' => Setting::get('facebook_url'), 'icon' => 'bi-facebook', 'sort_order' => 10, 'is_active' => true] : null,
+                    Setting::get('instagram_url') ? ['name' => 'Instagram', 'url' => Setting::get('instagram_url'), 'icon' => 'bi-instagram', 'sort_order' => 20, 'is_active' => true] : null,
+                    Setting::get('youtube_url') ? ['name' => 'YouTube', 'url' => Setting::get('youtube_url'), 'icon' => 'bi-youtube', 'sort_order' => 30, 'is_active' => true] : null,
+                ]))),
             ]);
         });
     }

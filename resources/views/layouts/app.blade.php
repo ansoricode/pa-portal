@@ -154,14 +154,40 @@
                     <p class="small text-white-50 mb-2"><i class="bi bi-clock me-1"></i>{{ $setting('footer_hours') }}</p>
                 @endif
                 <div class="d-flex gap-3">
-                    @if($setting('facebook_url'))<a href="{{ $setting('facebook_url') }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white"><i class="bi bi-facebook"></i></a>@endif
-                    @if($setting('instagram_url'))<a href="{{ $setting('instagram_url') }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white"><i class="bi bi-instagram"></i></a>@endif
-                    @if($setting('youtube_url'))<a href="{{ $setting('youtube_url') }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-white"><i class="bi bi-youtube"></i></a>@endif
+                    @foreach($footerSocial as $social)
+                        @php
+                            $socialName = strtolower(trim((string) ($social['name'] ?? '')));
+                            $socialIcon = strtolower(trim((string) ($social['icon'] ?? '')));
+                            $knownSocialIcons = [
+                                'facebook' => 'bi-facebook',
+                                'fb' => 'bi-facebook',
+                                'instagram' => 'bi-instagram',
+                                'ig' => 'bi-instagram',
+                                'youtube' => 'bi-youtube',
+                                'tiktok' => 'bi-tiktok',
+                                'twitter' => 'bi-twitter-x',
+                                'x' => 'bi-twitter-x',
+                                'whatsapp' => 'bi-whatsapp',
+                                'telegram' => 'bi-telegram',
+                                'linkedin' => 'bi-linkedin',
+                            ];
+                            $bootstrapIcon = str_starts_with($socialIcon, 'bi-')
+                                ? $socialIcon
+                                : ($knownSocialIcons[$socialName] ?? ($knownSocialIcons[$socialIcon] ?? null));
+                        @endphp
+                        <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="{{ $social['name'] }}" title="{{ $social['name'] }}" class="text-white">
+                            @if($bootstrapIcon)
+                                <i class="bi {{ $bootstrapIcon }}" aria-hidden="true"></i>
+                            @else
+                                <i class="bi bi-link-45deg" aria-hidden="true"></i>
+                            @endif
+                        </a>
+                    @endforeach
                 </div>
             </div>
             @if($footerLinks)
                 <div class="col-md-6 col-lg-3">
-                    <h3 class="font-display fw-bold fs-6 text-pa-secondary mb-3">Tautan Footer</h3>
+                    <h3 class="font-display fw-bold fs-6 text-pa-secondary mb-3">{{ $setting('footer_links_title', 'Tautan Footer') }}</h3>
                     <ul class="list-unstyled small d-grid gap-2">
                         @foreach($footerLinks as $link)
                             <li>
@@ -170,8 +196,10 @@
                                         @if(str_starts_with($link['icon'], 'uploads/footer/') || str_starts_with($link['icon'], 'http'))
                                             <img src="{{ str_starts_with($link['icon'], 'http') ? $link['icon'] : asset('storage/'.$link['icon']) }}" alt="" style="height:18px;width:18px;object-fit:contain">
                                         @else
-                                            <i class="bi {{ $link['icon'] }}"></i>
+                                            <i class="bi {{ str_starts_with($link['icon'], 'bi-') ? $link['icon'] : 'bi-'.$link['icon'] }}"></i>
                                         @endif
+                                    @else
+                                        <i class="bi bi-link-45deg"></i>
                                     @endif
                                     <span>{{ $link['name'] }}@if(! empty($link['description']))<small class="d-block text-white-50">{{ $link['description'] }}</small>@endif</span>
                                 </a>
@@ -181,20 +209,27 @@
                 </div>
             @endif
             <div class="col-md-6 col-lg-{{ $footerLinks ? 4 : 7 }}">
-                <h3 class="font-display fw-bold fs-6 text-pa-secondary mb-3">Tautan Ekosistem Peradilan</h3>
+                <h3 class="font-display fw-bold fs-6 text-pa-secondary mb-3">{{ $setting('footer_ecosystem_title', 'Tautan Ekosistem Peradilan') }}</h3>
                 <ul class="list-unstyled small d-grid gap-2">
                     @foreach($footerEcosystem as $link)
                         <li>
                             <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none d-flex align-items-center gap-2">
-                                @if(! empty($link['logo']))
-                                    <img src="{{ asset('storage/'.$link['logo']) }}" alt="" style="height:22px;width:22px;object-fit:contain">
+                                @if(! empty($link['icon']))
+                                    <i class="bi {{ str_starts_with($link['icon'], 'bi-') ? $link['icon'] : 'bi-'.$link['icon'] }}"></i>
+                                @elseif(! empty($link['logo']))
+                                    <span class="d-inline-flex align-items-center justify-content-center" style="position:relative;width:22px;height:22px">
+                                        <i class="bi bi-bank ecosystem-icon-fallback" aria-hidden="true"></i>
+                                        <img src="{{ asset('storage/'.$link['logo']) }}" alt="" data-ecosystem-logo style="position:absolute;height:22px;width:22px;object-fit:contain">
+                                    </span>
+                                @else
+                                    <i class="bi bi-bank"></i>
                                 @endif
                                 {{ $link['name'] }}
                             </a>
                         </li>
                     @endforeach
                 </ul>
-                <h3 class="font-display fw-bold fs-6 text-pa-secondary mt-4 mb-2">Statistik Kunjungan Website</h3>
+                <h3 class="font-display fw-bold fs-6 text-pa-secondary mt-4 mb-2">{{ $setting('footer_stats_title', 'Statistik Kunjungan Website') }}</h3>
                 <ul class="list-unstyled small text-white-50 d-grid gap-1 bg-white bg-opacity-10 p-2 rounded mb-0">
                     <li class="d-flex justify-content-between"><span>Hari ini:</span> <strong class="text-white">{{ number_format($visitStats['today'], 0, ',', '.') }}</strong></li>
                     <li class="d-flex justify-content-between"><span>Bulan ini:</span> <strong class="text-white">{{ number_format($visitStats['month'], 0, ',', '.') }}</strong></li>
@@ -282,6 +317,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="{{ asset('js/portal.js') }}"></script>
+<script nonce="{{ $cspNonce ?? '' }}">
+    document.querySelectorAll('[data-ecosystem-logo]').forEach(function (image) {
+        image.addEventListener('error', function () {
+            image.style.display = 'none';
+        });
+    });
+</script>
 @stack('scripts')
 </body>
 </html>
