@@ -218,7 +218,7 @@
     @yield('content')
 </main>
 
-<footer class="bg-dark text-white pt-5 pb-4">
+<footer class="site-footer bg-dark text-white pt-5 pb-4">
     <div class="container-lg">
         <div class="row g-4">
             <div class="col-lg-5">
@@ -237,7 +237,7 @@
                 @if($setting('footer_hours'))
                     <p class="small text-white-50 mb-2"><i class="bi bi-clock me-1"></i>{{ $setting('footer_hours') }}</p>
                 @endif
-                <div class="d-flex gap-3">
+                <div class="site-footer-social d-flex gap-3">
                     @foreach($footerSocial as $social)
                         @php
                             $socialName = strtolower(trim((string) ($social['name'] ?? '')));

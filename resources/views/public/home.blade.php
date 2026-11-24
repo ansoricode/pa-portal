@@ -15,7 +15,7 @@
     <div class="carousel-inner">
         @foreach($sliders as $i => $s)
             <div class="carousel-item {{ $i === 0 ? 'active' : '' }}" style="background-image: url('{{ $s->image_url }}');">
-                <div class="container-lg py-5 d-flex flex-column justify-content-center text-white hero-content" style="min-height: 55vh;">
+                <div class="container-lg py-5 d-flex flex-column justify-content-center text-white hero-content">
                     @if($s->badge)<span class="badge bg-pa-secondary text-dark fw-bold align-self-start mb-3 px-3 py-2">{{ $s->badge }}</span>@endif
                     <h2 class="font-display display-5 fw-bold">{{ $s->title }}</h2>
                     @if($s->subtitle)<p class="mt-3 fs-5 text-white-50" style="max-width: 42rem;">{{ $s->subtitle }}</p>@endif
@@ -37,7 +37,7 @@
 
 {{-- Pintasan layanan --}}
 @if($shortcuts->isNotEmpty())
-<section class="py-5 bg-white">
+<section class="home-services py-5 bg-white">
     <div class="container-lg">
         <div class="text-center mb-5">
             <h2 class="font-display h2 fw-bold text-pa-primary">Portal Layanan & Informasi</h2>
@@ -59,11 +59,11 @@
 @endif
 
 {{-- Pengumuman & berita --}}
-<section class="py-5">
+<section class="home-updates py-5">
     <div class="container-lg">
         <div class="row g-4">
             <div class="col-lg-5">
-                <div class="bg-white p-4 rounded-3 shadow-sm h-100 border-top border-4 border-pa-primary">
+                <div class="home-panel home-panel-announcements bg-white p-4 rounded-3 shadow-sm h-100 border-top border-4 border-pa-primary">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <h3 class="font-display fw-bold h5 text-pa-primary mb-0">Pengumuman</h3>
                         <a href="{{ route('announcements.index') }}" class="small text-pa-primary fw-semibold text-decoration-none">Semua &rarr;</a>
@@ -83,7 +83,7 @@
             </div>
 
             <div class="col-lg-7">
-                <div class="bg-white p-4 rounded-3 shadow-sm h-100 border-top border-4 border-pa-secondary">
+                <div class="home-panel home-panel-news bg-white p-4 rounded-3 shadow-sm h-100 border-top border-4 border-pa-secondary">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <h3 class="font-display fw-bold h5 text-pa-primary mb-0">Berita</h3>
                         <a href="{{ route('news.index') }}" class="small text-pa-primary fw-semibold text-decoration-none">Indeks Berita &rarr;</a>
@@ -104,7 +104,7 @@
 </section>
 
 {{-- Indeks survei --}}
-<section class="py-5 bg-pa-primary text-white">
+<section class="home-survey py-5 bg-pa-primary text-white">
     <div class="container-lg">
         <div class="text-center mb-5">
             <h2 class="font-display h2 fw-bold">Suara Masyarakat, Kualitas Pelayanan</h2>

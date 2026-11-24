@@ -9,14 +9,34 @@
             --pa-primary-light: #e6f3ef;
             --pa-secondary: #ff9900;
             --pa-secondary-hover: #e68a00;
+            --pa-ink: #17352b;
+            --pa-muted: #63736c;
+            --pa-line: #e4ece8;
             --bs-font-sans-serif: 'Inter', sans-serif;
             --bs-body-font-family: var(--bs-font-sans-serif);
-            --bs-body-bg: #f8f9fa;
+            --bs-body-bg: #f5f8f6;
             --base-font-size: 16px;
         }
 
         html {
             font-size: var(--base-font-size);
+        }
+
+        body {
+            color: var(--pa-ink);
+            background: var(--bs-body-bg);
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            letter-spacing: -0.025em;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid var(--pa-secondary);
+            outline-offset: 3px;
         }
 
         /* Utilitas Warna Kustom */
@@ -34,13 +54,15 @@
             color: #111827;
             border-color: var(--pa-secondary);
             font-weight: 700;
-            transition: all 0.2s ease;
+            box-shadow: 0 0.5rem 1.1rem rgba(230, 138, 0, 0.2);
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
         .btn-pa-secondary:hover, .btn-pa-secondary:focus {
             background-color: var(--pa-secondary-hover);
             border-color: var(--pa-secondary-hover);
             color: #000000;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 0.75rem 1.4rem rgba(230, 138, 0, 0.24);
         }
 
         .btn-pa-primary {
@@ -48,7 +70,7 @@
             color: #ffffff;
             border-color: var(--pa-primary);
             font-weight: 600;
-            transition: all 0.2s ease;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
         .btn-pa-primary:hover, .btn-pa-primary:focus {
             background-color: var(--pa-primary-dark);
@@ -99,6 +121,18 @@
         .topbar-shell {
             min-width: 0;
             white-space: nowrap;
+        }
+
+        header > .bg-pa-primary {
+            background: linear-gradient(100deg, var(--pa-primary-dark), var(--pa-primary)) !important;
+        }
+
+        .navbar-expand-wide {
+            border-bottom: 1px solid rgba(23, 53, 43, 0.07);
+        }
+
+        .navbar-brand img {
+            filter: drop-shadow(0 0.2rem 0.3rem rgba(23, 53, 43, 0.12));
         }
 
         .topbar-contact {
@@ -228,7 +262,7 @@
             font-size: 0.925rem;
             padding: 0.5rem 0.75rem;
             border-bottom: 3px solid transparent;
-            transition: all 0.2s ease;
+            transition: color 0.2s ease, border-color 0.2s ease;
         }
         .navbar-nav .nav-link:hover {
             color: var(--pa-primary);
@@ -274,38 +308,146 @@
            3. HERO SLIDER EKONOMIS (MAKSIMAL 3-5 SLIDE - BAB III HURUF C)
            ========================================================================== */
         #hero-carousel .carousel-item {
-            min-height: 55vh;
+            min-height: clamp(30rem, 64vh, 43rem);
             background-position: center;
             background-size: cover;
             position: relative;
+            isolation: isolate;
         }
         #hero-carousel .carousel-item::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, rgba(5, 110, 79, 0.92) 0%, rgba(5, 110, 79, 0.75) 60%, rgba(3, 77, 55, 0.6) 100%);
+            z-index: 0;
+            background:
+                linear-gradient(90deg, rgba(3, 49, 36, 0.94) 0%, rgba(5, 86, 62, 0.82) 48%, rgba(3, 77, 55, 0.35) 100%),
+                linear-gradient(0deg, rgba(3, 49, 36, 0.35), transparent 55%);
         }
         #hero-carousel .hero-content {
             position: relative;
             z-index: 10;
+            min-height: clamp(30rem, 64vh, 43rem);
+            padding-top: 5rem !important;
+            padding-bottom: 5rem !important;
+        }
+
+        #hero-carousel .hero-content > * {
+            max-width: 48rem;
+        }
+
+        #hero-carousel .hero-content h2 {
+            max-width: 46rem;
+            font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+            line-height: 1.08;
+            text-wrap: balance;
+            text-shadow: 0 0.2rem 1.5rem rgba(0, 0, 0, 0.2);
+        }
+
+        #hero-carousel .hero-content p {
+            max-width: 40rem !important;
+            color: rgba(255, 255, 255, 0.86) !important;
+            font-size: clamp(1rem, 1.45vw, 1.2rem) !important;
+            line-height: 1.75;
+        }
+
+        #hero-carousel .hero-content .badge {
+            border-radius: 999px;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+
+        #hero-carousel .carousel-indicators {
+            z-index: 11;
+            margin-bottom: 1.5rem;
+        }
+
+        #hero-carousel .carousel-indicators [data-bs-target] {
+            width: 2rem;
+            height: 0.25rem;
+            border: 0;
+            border-radius: 999px;
+        }
+
+        #hero-carousel .carousel-control-prev,
+        #hero-carousel .carousel-control-next {
+            z-index: 12;
+            width: 8%;
+        }
+
+        #hero-carousel .carousel-control-prev-icon,
+        #hero-carousel .carousel-control-next-icon {
+            width: 2.75rem;
+            height: 2.75rem;
+            padding: 0.65rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            background-color: rgba(3, 49, 36, 0.45);
+            background-size: 42%;
+            backdrop-filter: blur(0.5rem);
         }
 
         /* Kartu Pintasan Layanan (Akses <= 2 Klik) */
+        .home-services {
+            position: relative;
+            z-index: 1;
+            padding-top: 4.5rem !important;
+            padding-bottom: 4.75rem !important;
+        }
+
+        .home-services .text-center {
+            margin-bottom: 2.5rem !important;
+        }
+
+        .home-services h2,
+        .home-updates h3,
+        .home-survey h2 {
+            color: var(--pa-ink);
+        }
+
+        .home-services .text-center > p,
+        .home-survey > .container-lg > .text-center > p {
+            color: var(--pa-muted) !important;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
         .card-shortcut {
-            transition: all 0.25s ease-in-out;
-            border: 1px solid #e5e7eb;
-            color: #1f2937;
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 14.5rem;
+            padding: 2rem 1.5rem !important;
+            border: 1px solid var(--pa-line);
+            border-radius: 1.1rem !important;
+            background: linear-gradient(145deg, #fff, #f8fbf9) !important;
+            color: var(--pa-ink);
+            box-shadow: 0 0.5rem 1.5rem rgba(24, 64, 48, 0.045) !important;
+            transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
         }
         .card-shortcut:hover {
-            background-color: var(--pa-primary) !important;
+            background: linear-gradient(145deg, var(--pa-primary), var(--pa-primary-dark)) !important;
             border-color: var(--pa-primary);
             color: #ffffff;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(5, 110, 79, 0.15) !important;
+            transform: translateY(-5px);
+            box-shadow: 0 1rem 2rem rgba(5, 110, 79, 0.16) !important;
         }
         .card-shortcut .bi {
+            display: inline-flex;
+            width: 3.75rem;
+            height: 3.75rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1.2rem;
+            background: var(--pa-primary-light);
             color: var(--pa-primary);
+            font-size: 2rem;
             transition: color 0.25s ease;
+        }
+
+        .card-shortcut p {
+            font-size: 0.9rem;
+            line-height: 1.55;
         }
         .card-shortcut:hover .bi {
             color: var(--pa-secondary);
@@ -315,6 +457,142 @@
         }
         .card-shortcut:hover p {
             color: #e5e7eb !important;
+        }
+
+        .home-updates {
+            padding-top: 4.5rem !important;
+            padding-bottom: 4.75rem !important;
+            background:
+                radial-gradient(ellipse at 10% 0%, rgba(5, 110, 79, 0.045), transparent 35%),
+                #f5f8f6;
+        }
+
+        .home-panel {
+            padding: clamp(1.25rem, 2.2vw, 2rem) !important;
+            border: 1px solid var(--pa-line) !important;
+            border-top-width: 4px !important;
+            border-radius: 1rem !important;
+            box-shadow: 0 0.75rem 2.25rem rgba(24, 64, 48, 0.07) !important;
+        }
+
+        .home-panel > .d-flex {
+            padding-bottom: 1rem !important;
+            margin-bottom: 0.5rem !important;
+            border-color: var(--pa-line) !important;
+        }
+
+        .home-panel .list-group-item {
+            border-color: var(--pa-line);
+            transition: padding 0.2s ease, color 0.2s ease;
+        }
+
+        .home-panel .list-group-item:hover {
+            padding-left: 0.5rem !important;
+            color: var(--pa-primary);
+        }
+
+        .home-panel .badge {
+            border-radius: 999px;
+            padding: 0.4rem 0.7rem;
+        }
+
+        .home-panel-news .card {
+            overflow: hidden;
+            border-color: var(--pa-line) !important;
+            border-radius: 0.85rem;
+            box-shadow: 0 0.4rem 1.25rem rgba(24, 64, 48, 0.055);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .home-panel-news .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.8rem 1.75rem rgba(24, 64, 48, 0.1);
+        }
+
+        .home-panel-news .card-img-top {
+            transition: transform 0.35s ease;
+        }
+
+        .home-panel-news .card:hover .card-img-top {
+            transform: scale(1.025);
+        }
+
+        .home-survey {
+            position: relative;
+            overflow: hidden;
+            padding-top: 5rem !important;
+            padding-bottom: 5rem !important;
+            background:
+                radial-gradient(ellipse at 85% 0%, rgba(255, 255, 255, 0.1), transparent 35%),
+                linear-gradient(135deg, var(--pa-primary-dark), var(--pa-primary)) !important;
+        }
+
+        .home-survey > .container-lg {
+            position: relative;
+            z-index: 1;
+        }
+
+        .home-survey h2 {
+            color: #fff;
+        }
+
+        .home-survey > .container-lg > .text-center > p {
+            color: rgba(255, 255, 255, 0.78) !important;
+        }
+
+        .home-survey .row > .col > .bg-white {
+            border-radius: 1rem !important;
+            background: rgba(255, 255, 255, 0.09) !important;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .home-survey .row > .col > .bg-white:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.13) !important;
+        }
+
+        .home-survey .survey-official-card {
+            border-radius: 1rem !important;
+            box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.16);
+        }
+
+        .home-survey .text-center > .btn {
+            border-radius: 999px;
+            padding-right: 1.75rem !important;
+            padding-left: 1.75rem !important;
+        }
+
+        .site-footer {
+            background: linear-gradient(135deg, #102b22, #153a2e) !important;
+            border-top: 3px solid var(--pa-secondary);
+        }
+
+        .site-footer a {
+            transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .site-footer a:hover {
+            color: #ffffff !important;
+        }
+
+        .site-footer-social a {
+            display: inline-flex;
+            width: 2.25rem;
+            height: 2.25rem;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            text-decoration: none;
+        }
+
+        .site-footer-social a:hover {
+            transform: translateY(-2px);
+            border-color: var(--pa-secondary);
+            background: var(--pa-secondary);
+            color: var(--pa-primary-dark) !important;
         }
 
         /* ==========================================================================
@@ -366,6 +644,12 @@
             color: #000000 !important;
             border: 2px solid #ffffff !important;
         }
+        body.high-contrast .home-survey .row > .col > .bg-white,
+        body.high-contrast .home-survey .row > .col > .bg-white:hover {
+            background: #000000 !important;
+            border: 1px solid #ffff00 !important;
+            color: #ffff00 !important;
+        }
 
         /* Line Clamp */
         .line-clamp-3 {
@@ -373,6 +657,45 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 3;
             overflow: hidden;
+        }
+
+        @media (max-width: 767.98px) {
+            #hero-carousel .carousel-item,
+            #hero-carousel .hero-content {
+                min-height: 32rem;
+            }
+
+            #hero-carousel .hero-content {
+                padding-top: 4rem !important;
+                padding-bottom: 4rem !important;
+            }
+
+            #hero-carousel .carousel-control-prev,
+            #hero-carousel .carousel-control-next {
+                width: 12%;
+            }
+
+            .home-services,
+            .home-updates,
+            .home-survey {
+                padding-top: 3.25rem !important;
+                padding-bottom: 3.25rem !important;
+            }
+
+            .card-shortcut {
+                min-height: 12.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+            }
         }
 
 /* Tambahan Laravel */
