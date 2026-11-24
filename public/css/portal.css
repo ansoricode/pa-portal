@@ -793,7 +793,26 @@
             }
 
             .card-shortcut {
-                min-height: 12.5rem;
+                min-height: 10.5rem;
+                padding: 1.25rem 1rem !important;
+            }
+
+            .card-shortcut .bi {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 1rem;
+                font-size: 1.65rem;
+            }
+
+            .card-shortcut h3 {
+                margin-top: 0.75rem !important;
+                font-size: 1.05rem !important;
+            }
+
+            .card-shortcut p {
+                margin-top: 0.5rem !important;
+                font-size: 0.82rem;
+                line-height: 1.45;
             }
         }
 
