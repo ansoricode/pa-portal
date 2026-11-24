@@ -309,6 +309,8 @@
            ========================================================================== */
         #hero-carousel .carousel-item {
             min-height: clamp(30rem, 64vh, 43rem);
+            background-color: var(--pa-primary-dark);
+            background-image: linear-gradient(135deg, var(--pa-primary-dark), var(--pa-primary));
             background-position: center;
             background-size: cover;
             position: relative;
@@ -322,6 +324,58 @@
             background:
                 linear-gradient(90deg, rgba(3, 49, 36, 0.94) 0%, rgba(5, 86, 62, 0.82) 48%, rgba(3, 77, 55, 0.35) 100%),
                 linear-gradient(0deg, rgba(3, 49, 36, 0.35), transparent 55%);
+        }
+        /* Slide tanpa foto: cahaya lembut + pola titik agar sisi kanan tidak kosong */
+        #hero-carousel .carousel-item:not(.has-image) {
+            background-image:
+                radial-gradient(circle at 82% 45%, rgba(245, 158, 11, 0.22) 0, transparent 38%),
+                radial-gradient(circle at 70% 90%, rgba(255, 255, 255, 0.10) 0, transparent 40%),
+                radial-gradient(rgba(255, 255, 255, 0.07) 1.5px, transparent 1.5px),
+                linear-gradient(135deg, var(--pa-primary-dark), var(--pa-primary));
+            background-size: auto, auto, 26px 26px, auto;
+        }
+        #hero-carousel .carousel-item:not(.has-image)::before {
+            background: linear-gradient(90deg, rgba(3, 49, 36, 0.55) 0%, transparent 60%);
+        }
+        /* Slide berfoto: gelapkan hanya sisi teks agar foto di kanan tetap jelas */
+        #hero-carousel .carousel-item.has-image::before {
+            background:
+                linear-gradient(90deg, rgba(3, 49, 36, 0.9) 0%, rgba(3, 49, 36, 0.72) 32%, rgba(3, 49, 36, 0.2) 55%, transparent 70%),
+                linear-gradient(0deg, rgba(3, 49, 36, 0.25), transparent 40%);
+        }
+        #hero-carousel .carousel-item.has-image {
+            background-position: center bottom;
+        }
+        #hero-carousel .carousel-item.has-image .hero-content > * {
+            max-width: min(36rem, 52%);
+        }
+        #hero-carousel .carousel-item.has-image .hero-content h2 {
+            max-width: 100%;
+            font-size: clamp(1.9rem, 3.4vw, 3rem);
+        }
+        /* Layar sempit: foto tampil utuh di atas (tanpa terpotong), teks di bawahnya */
+        @media (max-width: 991.98px) {
+            #hero-carousel .carousel-item.has-image {
+                min-height: 0;
+                background-size: 100% auto;
+                background-position: center top;
+                background-repeat: no-repeat;
+            }
+            #hero-carousel .carousel-item.has-image::before {
+                inset: 43.75vw 0 0 0;
+                background: linear-gradient(180deg, var(--pa-primary-dark), var(--pa-primary));
+            }
+            #hero-carousel .carousel-item.has-image .hero-content {
+                min-height: 0;
+                padding-top: calc(43.75vw + 1.75rem) !important;
+                padding-bottom: 4rem !important;
+            }
+            #hero-carousel .carousel-item.has-image .hero-content > * {
+                max-width: 100%;
+            }
+            #hero-carousel .carousel-item.has-image .hero-content h2 {
+                font-size: clamp(1.5rem, 5vw, 2.25rem);
+            }
         }
         #hero-carousel .hero-content {
             position: relative;
@@ -356,6 +410,22 @@
             text-transform: uppercase;
         }
 
+        /* Desktop: semua slide berasio sama (16:7 = ukuran foto yang disarankan) agar tinggi tidak
+           melompat antar slide dan foto tidak terpotong di layar sedang maupun ultra-lebar */
+        @media (min-width: 992px) {
+            #hero-carousel .carousel-item {
+                min-height: 0;
+                aspect-ratio: 16 / 7;
+                max-height: 52rem;
+                background-position: center;
+            }
+            #hero-carousel .carousel-item .hero-content {
+                min-height: 100%;
+                height: 100%;
+                padding-top: 2.5rem !important;
+                padding-bottom: 3.5rem !important;
+            }
+        }
         #hero-carousel .carousel-indicators {
             z-index: 11;
             margin-bottom: 1.5rem;

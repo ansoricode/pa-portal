@@ -14,7 +14,7 @@
     @endif
     <div class="carousel-inner">
         @foreach($sliders as $i => $s)
-            <div class="carousel-item {{ $i === 0 ? 'active' : '' }}" style="background-image: url('{{ $s->image_url }}');">
+            <div class="carousel-item {{ $i === 0 ? 'active' : '' }} {{ $s->image_url ? 'has-image' : '' }}" @if($s->image_url) style="background-image: url('{{ $s->image_url }}');" @endif>
                 <div class="container-lg py-5 d-flex flex-column justify-content-center text-white hero-content">
                     @if($s->badge)<span class="badge bg-pa-secondary text-dark fw-bold align-self-start mb-3 px-3 py-2">{{ $s->badge }}</span>@endif
                     <h2 class="font-display display-5 fw-bold">{{ $s->title }}</h2>
