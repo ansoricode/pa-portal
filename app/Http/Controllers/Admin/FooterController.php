@@ -36,6 +36,7 @@ class FooterController extends Controller
             'footer_links_title' => 'nullable|string|max:150',
             'footer_ecosystem_title' => 'nullable|string|max:150',
             'footer_stats_title' => 'nullable|string|max:150',
+            'whatsapp' => 'nullable|string|max:50',
             'footer_links' => 'nullable|array|max:30',
             'footer_links.*.name' => 'required_with:footer_links|string|max:150',
             'footer_links.*.url' => 'required_with:footer_links|url:http,https|max:2048',
@@ -125,6 +126,7 @@ class FooterController extends Controller
         Setting::put('footer_social', json_encode($socialLinks, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         Setting::put('footer_hours', $request->input('footer_hours'));
         Setting::put('footer_copyright', $request->input('footer_copyright'));
+        Setting::put('whatsapp', $request->input('whatsapp'));
         Setting::put('footer_links_title', trim((string) $request->input('footer_links_title')) ?: 'Tautan Footer');
         Setting::put('footer_ecosystem_title', trim((string) $request->input('footer_ecosystem_title')) ?: 'Tautan Ekosistem Peradilan');
         Setting::put('footer_stats_title', trim((string) $request->input('footer_stats_title')) ?: 'Statistik Kunjungan Website');

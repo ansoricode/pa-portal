@@ -30,6 +30,19 @@ class AppServiceProvider extends ServiceProvider
 
         // $setting('kunci', 'default') tersedia di semua view
         View::share('setting', fn (string $key, $default = null) => Setting::get($key, $default));
+        $legacySocialLinks = array_values(array_filter([
+            Setting::get('facebook_url') ? ['name' => 'Facebook', 'url' => Setting::get('facebook_url'), 'icon' => 'bi-facebook', 'sort_order' => 10, 'is_active' => true] : null,
+            Setting::get('instagram_url') ? ['name' => 'Instagram', 'url' => Setting::get('instagram_url'), 'icon' => 'bi-instagram', 'sort_order' => 20, 'is_active' => true] : null,
+            Setting::get('youtube_url') ? ['name' => 'YouTube', 'url' => Setting::get('youtube_url'), 'icon' => 'bi-youtube', 'sort_order' => 30, 'is_active' => true] : null,
+        ]));
+        $storedSocialLinks = json_decode((string) Setting::get('footer_social', ''), true);
+        $footerSocial = is_array($storedSocialLinks) ? $storedSocialLinks : $legacySocialLinks;
+        $footerSocial = collect($footerSocial)
+            ->filter(fn ($item) => ($item['is_active'] ?? true) && ! empty($item['name']) && ! empty($item['url']))
+            ->sortBy(fn ($item) => (int) ($item['sort_order'] ?? 0))
+            ->values()
+            ->all();
+        View::share('footerSocial', $footerSocial);
 
         // Menu navigasi dinamis + statistik kunjungan untuk layout publik
         View::composer('layouts.app', function ($view) {

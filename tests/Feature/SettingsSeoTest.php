@@ -36,7 +36,8 @@ class SettingsSeoTest extends TestCase
             ->get(route('admin.settings'))
             ->assertOk()
             ->assertSee('SEO & Tampilan')
-            ->assertSee('Favicon Situs (PNG/ICO)');
+            ->assertSee('Favicon Situs (PNG/ICO)')
+            ->assertDontSee('Ikon Facebook ditampilkan');
 
         $this->put(route('admin.settings.update'), [
             'site_name' => 'Pengadilan Agama Contoh',
@@ -89,6 +90,29 @@ class SettingsSeoTest extends TestCase
         $this->actingAs($admin)->put(route('admin.settings.update'), [
             'favicon' => UploadedFile::fake()->create('favicon.txt', 1, 'text/plain'),
         ])->assertSessionHasErrors('favicon');
+    }
+
+    public function test_header_social_and_whatsapp_settings_are_rendered(): void
+    {
+        config(['portal.require_2fa' => false]);
+        $admin = User::factory()->create([
+            'role' => 'superadmin',
+            'is_active' => true,
+            'must_change_password' => false,
+        ]);
+
+        Setting::put('whatsapp', '0812-3456-7890');
+        Setting::put('facebook_url', 'https://facebook.com/pacontoh');
+        Setting::put('instagram_url', 'https://instagram.com/pacontoh');
+        Setting::put('youtube_url', 'https://youtube.com/@pacontoh');
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('WhatsApp PTSP')
+            ->assertSee('https://wa.me/6281234567890', false)
+            ->assertSee('https://facebook.com/pacontoh', false)
+            ->assertSee('https://instagram.com/pacontoh', false)
+            ->assertSee('https://youtube.com/@pacontoh', false);
     }
 
     public function test_sipp_setting_updates_the_homepage_shortcut_url(): void

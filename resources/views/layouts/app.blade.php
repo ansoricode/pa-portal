@@ -14,6 +14,21 @@
     $ogDescription = trim(strip_tags((string) $__env->yieldContent('og_description'))) ?: $metaDescription;
     $ogType = trim($__env->yieldContent('og_type')) ?: 'website';
     $sections = config('portal.sections');
+    $whatsapp = trim((string) $setting('whatsapp', ''));
+    $whatsappUrl = '';
+    if ($whatsapp !== '') {
+        if (preg_match('/^https?:\/\//i', $whatsapp)) {
+            $whatsappUrl = $whatsapp;
+        } else {
+            $whatsappNumber = preg_replace('/\D+/', '', $whatsapp);
+            if (str_starts_with($whatsappNumber, '0')) {
+                $whatsappNumber = '62'.substr($whatsappNumber, 1);
+            } elseif (str_starts_with($whatsappNumber, '8')) {
+                $whatsappNumber = '62'.$whatsappNumber;
+            }
+            $whatsappUrl = $whatsappNumber !== '' ? 'https://wa.me/'.$whatsappNumber : '';
+        }
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
@@ -59,14 +74,41 @@
                 <span class="d-none d-lg-inline"><i class="bi bi-shield-lock-fill text-pa-secondary me-1"></i> Portal Resmi Terverifikasi (.go.id)</span>
             </div>
             <div class="d-flex align-items-center gap-3">
+                @if($whatsappUrl)
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold">
+                        <i class="bi bi-whatsapp text-pa-secondary me-1"></i> WhatsApp PTSP
+                    </a>
+                @endif
                 <a href="{{ $setting('siwas_url', 'https://siwas.mahkamahagung.go.id') }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold">
                     <i class="bi bi-megaphone-fill text-pa-secondary me-1"></i> SIWAS MARI
                 </a>
                 <span class="text-white-50">|</span>
                 <div class="d-flex gap-2">
-                    @if($setting('facebook_url'))<a href="{{ $setting('facebook_url') }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white"><i class="bi bi-facebook"></i></a>@endif
-                    @if($setting('instagram_url'))<a href="{{ $setting('instagram_url') }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white"><i class="bi bi-instagram"></i></a>@endif
-                    @if($setting('youtube_url'))<a href="{{ $setting('youtube_url') }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-white"><i class="bi bi-youtube"></i></a>@endif
+                    @foreach($footerSocial as $social)
+                        @php
+                            $headerSocialIcon = strtolower(trim((string) ($social['icon'] ?? '')));
+                            $headerSocialName = strtolower(trim((string) ($social['name'] ?? '')));
+                            $headerKnownIcons = [
+                                'facebook' => 'bi-facebook',
+                                'fb' => 'bi-facebook',
+                                'instagram' => 'bi-instagram',
+                                'ig' => 'bi-instagram',
+                                'youtube' => 'bi-youtube',
+                                'tiktok' => 'bi-tiktok',
+                                'twitter' => 'bi-twitter-x',
+                                'x' => 'bi-twitter-x',
+                                'whatsapp' => 'bi-whatsapp',
+                                'telegram' => 'bi-telegram',
+                                'linkedin' => 'bi-linkedin',
+                            ];
+                            $headerSocialIcon = str_starts_with($headerSocialIcon, 'bi-')
+                                ? $headerSocialIcon
+                                : ($headerKnownIcons[$headerSocialName] ?? ($headerKnownIcons[$headerSocialIcon] ?? 'bi-link-45deg'));
+                        @endphp
+                        <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="{{ $social['name'] }}" title="{{ $social['name'] }}" class="text-white">
+                            <i class="{{ $headerSocialIcon }}"></i>
+                        </a>
+                    @endforeach
                 </div>
             </div>
         </div>

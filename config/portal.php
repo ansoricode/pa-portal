@@ -67,7 +67,7 @@ return [
             ['name' => 'address_district', 'label' => 'Kecamatan',              'type' => 'text'],
             ['name' => 'address_province', 'label' => 'Provinsi & Kode Pos',    'type' => 'text'],
             ['name' => 'phone',            'label' => 'Telepon',                'type' => 'text'],
-            ['name' => 'whatsapp',         'label' => 'WhatsApp PTSP',          'type' => 'text'],
+            ['name' => 'whatsapp',         'label' => 'WhatsApp PTSP',          'type' => 'text', 'hint' => 'Ditampilkan sebagai tautan WhatsApp PTSP pada bar atas header. Contoh: 0812-3456-7890.'],
             ['name' => 'email',            'label' => 'Email Resmi',            'type' => 'text'],
             ['name' => 'website',          'label' => 'Website Resmi',          'type' => 'text'],
             ['name' => 'building_photo', 'label' => 'Foto Gedung', 'type' => 'image', 'hint' => 'Foto ini ditampilkan pada halaman Alamat, Kontak & Foto Gedung.'],
@@ -82,11 +82,6 @@ return [
                 ],
                 'default' => 'top',
             ],
-        ],
-        'Media Sosial' => [
-            ['name' => 'facebook_url',  'label' => 'Facebook',  'type' => 'text'],
-            ['name' => 'instagram_url', 'label' => 'Instagram', 'type' => 'text'],
-            ['name' => 'youtube_url',   'label' => 'YouTube',   'type' => 'text'],
         ],
         'Tautan Sistem' => [
             ['name' => 'sipp_url',           'label' => 'SIPP Satker',                    'type' => 'text'],

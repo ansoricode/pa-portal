@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Page;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,6 +22,12 @@ class FooterSettingsTest extends TestCase
             'role' => 'superadmin',
             'is_active' => true,
             'must_change_password' => false,
+        ]);
+        Page::create([
+            'section' => 'profil',
+            'slug' => 'kontak',
+            'title' => 'Alamat, Kontak & Foto Gedung',
+            'is_active' => true,
         ]);
 
         $this->actingAs($superadmin)
@@ -43,6 +50,7 @@ class FooterSettingsTest extends TestCase
                 'footer_links_title' => 'Tautan Pilihan',
                 'footer_ecosystem_title' => 'Ekosistem Peradilan',
                 'footer_stats_title' => 'Jumlah Pengunjung',
+                'whatsapp' => '0812-3456-7890',
                 'facebook_url' => 'https://facebook.com/pacontoh',
                 'instagram_url' => 'https://instagram.com/pacontoh',
                 'youtube_url' => 'https://youtube.com/@pacontoh',
@@ -114,6 +122,13 @@ class FooterSettingsTest extends TestCase
             ->assertSee('bi-facebook')
             ->assertDontSee('<span class="small">FB</span>', false)
             ->assertSee('Senin-Jumat, 08.00-16.00 WIB');
+
+        $this->get(route('page.show', ['section' => 'profil', 'slug' => 'kontak']))
+            ->assertOk()
+            ->assertSee('WhatsApp PTSP')
+            ->assertSee('https://wa.me/6281234567890', false)
+            ->assertSee('Media Sosial')
+            ->assertSee('https://tiktok.com/@pacontoh', false);
     }
 
     public function test_regular_admin_cannot_open_footer_settings(): void
