@@ -32,7 +32,7 @@ return [
             ['name' => 'subtitle', 'label' => 'Deskripsi', 'type' => 'textarea', 'rules' => 'nullable|string|max:500'],
             ['name' => 'button_text', 'label' => 'Teks Tombol', 'type' => 'text', 'rules' => 'nullable|string|max:100'],
             ['name' => 'button_url', 'label' => 'Tautan Tombol', 'type' => 'text', 'rules' => 'nullable|string|max:255', 'help' => 'Contoh: /layanan-hukum/ecourt atau https://...'],
-            ['name' => 'image', 'label' => 'Gambar Latar (1600x700 disarankan)', 'type' => 'image'],
+            ['name' => 'image', 'label' => 'Gambar Latar (1920x544 disarankan)', 'type' => 'image'],
             ['name' => 'sort_order', 'label' => 'Urutan', 'type' => 'number', 'default' => 0, 'rules' => 'nullable|integer|min:0'],
             ['name' => 'is_active', 'label' => 'Aktif', 'type' => 'checkbox', 'default' => true],
         ],

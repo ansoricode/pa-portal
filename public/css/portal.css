@@ -308,7 +308,7 @@
            3. HERO SLIDER EKONOMIS (MAKSIMAL 3-5 SLIDE - BAB III HURUF C)
            ========================================================================== */
         #hero-carousel .carousel-item {
-            min-height: clamp(30rem, 64vh, 43rem);
+            min-height: clamp(24rem, 55vh, 30rem);
             background-color: var(--pa-primary-dark);
             background-image: linear-gradient(135deg, var(--pa-primary-dark), var(--pa-primary));
             background-position: center;
@@ -351,7 +351,7 @@
         }
         #hero-carousel .carousel-item.has-image .hero-content h2 {
             max-width: 100%;
-            font-size: clamp(1.9rem, 3.4vw, 3rem);
+            font-size: clamp(1.75rem, 3.4vw, 3rem);
         }
         /* Layar sempit: foto tampil utuh di atas (tanpa terpotong), teks di bawahnya */
         @media (max-width: 991.98px) {
@@ -365,24 +365,49 @@
                 inset: 43.75vw 0 0 0;
                 background: linear-gradient(180deg, var(--pa-primary-dark), var(--pa-primary));
             }
-            #hero-carousel .carousel-item.has-image .hero-content {
+            #hero-carousel .carousel-item:not(.has-image) {
                 min-height: 0;
-                padding-top: calc(43.75vw + 1.75rem) !important;
-                padding-bottom: 4rem !important;
             }
-            #hero-carousel .carousel-item.has-image .hero-content > * {
+            #hero-carousel .carousel-item.has-image .hero-content,
+            #hero-carousel .carousel-item:not(.has-image) .hero-content {
+                min-height: 0;
+                padding-top: calc(43.75vw + 0.75rem) !important;
+                padding-bottom: 1.75rem !important;
+            }
+            #hero-carousel .carousel-item.has-image .hero-content > *,
+            #hero-carousel .carousel-item:not(.has-image) .hero-content > * {
                 max-width: 100%;
             }
-            #hero-carousel .carousel-item.has-image .hero-content h2 {
-                font-size: clamp(1.5rem, 5vw, 2.25rem);
+            #hero-carousel .carousel-item.has-image .hero-content .badge,
+            #hero-carousel .carousel-item:not(.has-image) .hero-content .badge {
+                margin-bottom: 0.75rem !important;
+            }
+            #hero-carousel .carousel-item.has-image .hero-content h2,
+            #hero-carousel .carousel-item:not(.has-image) .hero-content h2 {
+                font-size: clamp(1.375rem, 4.5vw, 2rem);
+            }
+            #hero-carousel .carousel-item.has-image .hero-content p,
+            #hero-carousel .carousel-item:not(.has-image) .hero-content p {
+                margin-top: 0.75rem !important;
+                line-height: 1.55;
+            }
+            #hero-carousel .carousel-item.has-image .hero-content .mt-4,
+            #hero-carousel .carousel-item:not(.has-image) .hero-content .mt-4 {
+                margin-top: 1rem !important;
+            }
+            #hero-carousel .carousel-control-prev,
+            #hero-carousel .carousel-control-next {
+                top: 0;
+                bottom: auto;
+                height: 43.75vw;
             }
         }
         #hero-carousel .hero-content {
             position: relative;
             z-index: 10;
-            min-height: clamp(30rem, 64vh, 43rem);
-            padding-top: 5rem !important;
-            padding-bottom: 5rem !important;
+            min-height: clamp(24rem, 55vh, 30rem);
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
         }
 
         #hero-carousel .hero-content > * {
@@ -391,7 +416,7 @@
 
         #hero-carousel .hero-content h2 {
             max-width: 46rem;
-            font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+            font-size: clamp(1.75rem, 3.4vw, 3rem);
             line-height: 1.08;
             text-wrap: balance;
             text-shadow: 0 0.2rem 1.5rem rgba(0, 0, 0, 0.2);
@@ -410,20 +435,19 @@
             text-transform: uppercase;
         }
 
-        /* Desktop: semua slide berasio sama (16:7 = ukuran foto yang disarankan) agar tinggi tidak
-           melompat antar slide dan foto tidak terpotong di layar sedang maupun ultra-lebar */
+        /* Desktop: keep the carousel compact and all slides the same height. */
         @media (min-width: 992px) {
             #hero-carousel .carousel-item {
                 min-height: 0;
-                aspect-ratio: 16 / 7;
-                max-height: 52rem;
+                aspect-ratio: 8 / 3;
+                max-height: 34rem;
                 background-position: center;
             }
             #hero-carousel .carousel-item .hero-content {
                 min-height: 100%;
                 height: 100%;
                 padding-top: 2.5rem !important;
-                padding-bottom: 3.5rem !important;
+                padding-bottom: 2.5rem !important;
             }
         }
         #hero-carousel .carousel-indicators {
@@ -728,16 +752,24 @@
             -webkit-line-clamp: 3;
             overflow: hidden;
         }
-
         @media (max-width: 767.98px) {
-            #hero-carousel .carousel-item,
-            #hero-carousel .hero-content {
-                min-height: 32rem;
+            #hero-carousel {
+                --hero-mobile-image-height: 28.3333vw;
             }
 
-            #hero-carousel .hero-content {
-                padding-top: 4rem !important;
-                padding-bottom: 4rem !important;
+            #hero-carousel .carousel-item.has-image::before {
+                inset: var(--hero-mobile-image-height) 0 0;
+            }
+
+            #hero-carousel .carousel-item.has-image .hero-content,
+            #hero-carousel .carousel-item:not(.has-image) .hero-content {
+                padding-top: calc(var(--hero-mobile-image-height) + 0.75rem) !important;
+                padding-bottom: 3rem !important;
+            }
+
+            #hero-carousel .carousel-control-prev,
+            #hero-carousel .carousel-control-next {
+                height: var(--hero-mobile-image-height);
             }
 
             #hero-carousel .carousel-control-prev,
