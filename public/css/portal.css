@@ -775,6 +775,14 @@
             #hero-carousel .carousel-control-prev,
             #hero-carousel .carousel-control-next {
                 width: 12%;
+                min-width: 44px;
+            }
+
+            #hero-carousel .carousel-control-prev-icon,
+            #hero-carousel .carousel-control-next-icon {
+                width: 2.25rem;
+                height: 2.25rem;
+                background-size: 40%;
             }
 
             .home-services,
