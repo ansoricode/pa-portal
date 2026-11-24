@@ -40,8 +40,8 @@
 <section class="py-5 bg-white">
     <div class="container-lg">
         <div class="text-center mb-5">
-            <h2 class="font-display h2 fw-bold text-pa-primary">Pintasan Layanan Utama</h2>
-            <p class="text-secondary mx-auto" style="max-width: 40rem;">Akses langsung ke sistem informasi perkara, produk pengadilan, dan saluran pengaduan masyarakat.</p>
+            <h2 class="font-display h2 fw-bold text-pa-primary">Portal Layanan & Informasi</h2>
+            <p class="text-secondary mx-auto" style="max-width: 40rem;">Satu pintu untuk mengakses berbagai informasi dan layanan pengadilan.</p>
         </div>
         <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-lg-4">
             @foreach($shortcuts as $sc)
@@ -65,7 +65,7 @@
             <div class="col-lg-5">
                 <div class="bg-white p-4 rounded-3 shadow-sm h-100 border-top border-4 border-pa-primary">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                        <h3 class="font-display fw-bold h5 text-pa-primary mb-0">Pengumuman &amp; Panggilan Ghaib</h3>
+                        <h3 class="font-display fw-bold h5 text-pa-primary mb-0">Pengumuman</h3>
                         <a href="{{ route('announcements.index') }}" class="small text-pa-primary fw-semibold text-decoration-none">Semua &rarr;</a>
                     </div>
                     <div class="list-group list-group-flush">
@@ -85,7 +85,7 @@
             <div class="col-lg-7">
                 <div class="bg-white p-4 rounded-3 shadow-sm h-100 border-top border-4 border-pa-secondary">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                        <h3 class="font-display fw-bold h5 text-pa-primary mb-0">Berita Pelayanan &amp; Inovasi Satker</h3>
+                        <h3 class="font-display fw-bold h5 text-pa-primary mb-0">Berita</h3>
                         <a href="{{ route('news.index') }}" class="small text-pa-primary fw-semibold text-decoration-none">Indeks Berita &rarr;</a>
                     </div>
                     <div class="row g-3">
@@ -107,8 +107,8 @@
 <section class="py-5 bg-pa-primary text-white">
     <div class="container-lg">
         <div class="text-center mb-5">
-            <h2 class="font-display h2 fw-bold">Indeks Kepuasan &amp; Integritas Pelayanan</h2>
-            <p class="text-white-50 mx-auto" style="max-width: 40rem;">Transparansi hasil survei pelayanan publik sebagai komitmen peningkatan kualitas layanan peradilan.</p>
+            <h2 class="font-display h2 fw-bold">Suara Masyarakat, Kualitas Pelayanan</h2>
+            <p class="text-white-50 mx-auto" style="max-width: 40rem;">Hasil penilaian masyarakat menjadi landasan kami untuk terus meningkatkan kualitas pelayanan peradilan.</p>
         </div>
         @include('public.partials.indices', ['indices' => $indices])
         <div class="pt-3">
