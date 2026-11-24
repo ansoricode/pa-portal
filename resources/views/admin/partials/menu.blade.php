@@ -14,6 +14,9 @@
 <div class="grp">Sistem</div>
 @if($u->hasPermission('settings'))
     <a href="{{ route('admin.settings') }}" class="{{ request()->routeIs('admin.settings') ? 'active' : '' }}"><i class="bi bi-gear me-2"></i>Pengaturan Situs</a>
+    @if($u->isSuperAdmin())
+        <a href="{{ route('admin.footer.edit') }}" class="{{ request()->routeIs('admin.footer.*') ? 'active' : '' }}"><i class="bi bi-layout-text-window-reverse me-2"></i>Pengaturan Footer</a>
+    @endif
 @endif
 @if($u->hasPermission('users'))
     <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}"><i class="bi bi-person-gear me-2"></i>Manajemen Pengguna</a>

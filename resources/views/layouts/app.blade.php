@@ -150,28 +150,61 @@
                     @if($setting('phone'))Telepon: {{ $setting('phone') }}@endif
                     @if($setting('email')) | Email: {{ $setting('email') }}@endif
                 </p>
+                @if($setting('footer_hours'))
+                    <p class="small text-white-50 mb-2"><i class="bi bi-clock me-1"></i>{{ $setting('footer_hours') }}</p>
+                @endif
+                <div class="d-flex gap-3">
+                    @if($setting('facebook_url'))<a href="{{ $setting('facebook_url') }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white"><i class="bi bi-facebook"></i></a>@endif
+                    @if($setting('instagram_url'))<a href="{{ $setting('instagram_url') }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white"><i class="bi bi-instagram"></i></a>@endif
+                    @if($setting('youtube_url'))<a href="{{ $setting('youtube_url') }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-white"><i class="bi bi-youtube"></i></a>@endif
+                </div>
             </div>
-            <div class="col-md-6 col-lg-4">
+            @if($footerLinks)
+                <div class="col-md-6 col-lg-3">
+                    <h3 class="font-display fw-bold fs-6 text-pa-secondary mb-3">Tautan Footer</h3>
+                    <ul class="list-unstyled small d-grid gap-2">
+                        @foreach($footerLinks as $link)
+                            <li>
+                                <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none d-flex align-items-start gap-2">
+                                    @if(! empty($link['icon']))
+                                        @if(str_starts_with($link['icon'], 'uploads/footer/') || str_starts_with($link['icon'], 'http'))
+                                            <img src="{{ str_starts_with($link['icon'], 'http') ? $link['icon'] : asset('storage/'.$link['icon']) }}" alt="" style="height:18px;width:18px;object-fit:contain">
+                                        @else
+                                            <i class="bi {{ $link['icon'] }}"></i>
+                                        @endif
+                                    @endif
+                                    <span>{{ $link['name'] }}@if(! empty($link['description']))<small class="d-block text-white-50">{{ $link['description'] }}</small>@endif</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="col-md-6 col-lg-{{ $footerLinks ? 4 : 7 }}">
                 <h3 class="font-display fw-bold fs-6 text-pa-secondary mb-3">Tautan Ekosistem Peradilan</h3>
                 <ul class="list-unstyled small d-grid gap-2">
-                    <li><a href="https://www.mahkamahagung.go.id" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none">Mahkamah Agung RI</a></li>
-                    <li><a href="https://badilag.mahkamahagung.go.id" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none">Ditjen Badan Peradilan Agama</a></li>
-                    <li><a href="https://jdih.mahkamahagung.go.id" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none">JDIH Mahkamah Agung RI</a></li>
-                    <li><a href="https://simtepa.badilag.net" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none">SIMTEPA Badilag</a></li>
+                    @foreach($footerEcosystem as $link)
+                        <li>
+                            <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none d-flex align-items-center gap-2">
+                                @if(! empty($link['logo']))
+                                    <img src="{{ asset('storage/'.$link['logo']) }}" alt="" style="height:22px;width:22px;object-fit:contain">
+                                @endif
+                                {{ $link['name'] }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <h3 class="font-display fw-bold fs-6 text-pa-secondary mb-3">Statistik Kunjungan Website</h3>
-                <ul class="list-unstyled small text-white-50 d-grid gap-2 bg-white bg-opacity-10 p-3 rounded">
-                    <li class="d-flex justify-content-between"><span>Pengunjung Hari Ini:</span> <strong class="text-white">{{ number_format($visitStats['today'], 0, ',', '.') }}</strong></li>
-                    <li class="d-flex justify-content-between"><span>Bulan Ini:</span> <strong class="text-white">{{ number_format($visitStats['month'], 0, ',', '.') }}</strong></li>
-                    <li class="d-flex justify-content-between"><span>Total Kunjungan:</span> <strong class="text-pa-secondary">{{ number_format($visitStats['total'], 0, ',', '.') }}</strong></li>
+                <h3 class="font-display fw-bold fs-6 text-pa-secondary mt-4 mb-2">Statistik Kunjungan Website</h3>
+                <ul class="list-unstyled small text-white-50 d-grid gap-1 bg-white bg-opacity-10 p-2 rounded mb-0">
+                    <li class="d-flex justify-content-between"><span>Hari ini:</span> <strong class="text-white">{{ number_format($visitStats['today'], 0, ',', '.') }}</strong></li>
+                    <li class="d-flex justify-content-between"><span>Bulan ini:</span> <strong class="text-white">{{ number_format($visitStats['month'], 0, ',', '.') }}</strong></li>
+                    <li class="d-flex justify-content-between"><span>Total:</span> <strong class="text-pa-secondary">{{ number_format($visitStats['total'], 0, ',', '.') }}</strong></li>
                 </ul>
             </div>
         </div>
         <hr class="border-secondary my-4">
         <div class="text-center small text-white-50">
-            &copy; {{ date('Y') }} {{ $siteName }}. Standar Tata Kelola Website SK Dirjen Badilag No. 2722/DJA/SK.TI1/X/2026.
+            {!! $setting('footer_copyright', '&copy; '.date('Y').' '.$siteName.'. Standar Tata Kelola Website SK Dirjen Badilag No. 2722/DJA/SK.TI1/X/2026.') !!}
         </div>
     </div>
 </footer>

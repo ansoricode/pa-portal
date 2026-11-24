@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ResourceController;
 use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\FooterController;
 use App\Http\Controllers\Admin\TwoFactorChallengeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Public\AnnouncementController;
@@ -68,6 +69,8 @@ Route::middleware(SecurityHeaders::class)->group(function () use ($loginPath, $a
             Route::middleware(RequirePermission::class.':settings')->group(function () {
                 Route::get('pengaturan', [SettingController::class, 'edit'])->name('settings');
                 Route::put('pengaturan', [SettingController::class, 'update'])->name('settings.update');
+                Route::get('pengaturan-footer', [FooterController::class, 'edit'])->name('footer.edit');
+                Route::put('pengaturan-footer', [FooterController::class, 'update'])->name('footer.update');
             });
 
             Route::get('monitoring-kepatuhan', [ComplianceController::class, 'index'])->name('compliance.index');
