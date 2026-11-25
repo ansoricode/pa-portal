@@ -83,6 +83,14 @@
         </ul>
     </div>
 </div>
+@if($setting('google_maps_embed_url'))
+    <section class="mt-4" aria-labelledby="maps-heading">
+        <h3 id="maps-heading" class="h5 fw-bold text-pa-primary mb-3">Lokasi Pengadilan</h3>
+        <div class="ratio ratio-16x9">
+            <iframe src="{{ $setting('google_maps_embed_url') }}" title="Peta lokasi pengadilan" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </section>
+@endif
 @if($buildingPhotoUrl && $buildingPhotoPosition === 'bottom')
     @include('public.partials.building-photo')
 @endif

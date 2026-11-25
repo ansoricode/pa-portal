@@ -25,6 +25,7 @@ class SecurityHeaders
             "font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com",
             "img-src 'self' data: https:",
             "connect-src 'self'",
+            "frame-src 'self' https://www.google.com",
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self'",

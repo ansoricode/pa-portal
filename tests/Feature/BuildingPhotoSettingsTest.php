@@ -102,4 +102,65 @@ class BuildingPhotoSettingsTest extends TestCase
             ])
             ->assertSessionHasErrors('building_photo_position');
     }
+
+    public function test_admin_can_configure_and_remove_the_contact_page_map(): void
+    {
+        config(['portal.require_2fa' => false]);
+        $admin = User::factory()->create([
+            'role' => 'superadmin',
+            'is_active' => true,
+            'must_change_password' => false,
+        ]);
+        Page::create([
+            'section' => 'profil',
+            'slug' => 'kontak',
+            'title' => 'Alamat, Kontak & Foto Gedung',
+            'is_active' => true,
+        ]);
+        Page::create([
+            'section' => 'profil',
+            'slug' => 'tupoksi',
+            'title' => 'Tugas Pokok',
+            'is_active' => true,
+        ]);
+        $url = 'https://www.google.com/maps/embed?pb=!1m2!2m1&hl=id';
+
+        $this->actingAs($admin)->get(route('admin.settings'))
+            ->assertOk()->assertSee('URL Sematan Google Maps');
+        $this->put(route('admin.settings.update'), ['google_maps_embed_url' => $url])
+            ->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('settings', ['key' => 'google_maps_embed_url', 'value' => $url]);
+
+        $response = $this->get(route('page.show', ['section' => 'profil', 'slug' => 'kontak']))
+            ->assertOk()
+            ->assertSee('src="'.e($url).'"', false)
+            ->assertSee('title="Peta lokasi pengadilan"', false);
+        $this->assertStringContainsString('frame-src \'self\' https://www.google.com', $response->headers->get('Content-Security-Policy'));
+        $this->get(route('page.show', ['section' => 'profil', 'slug' => 'tupoksi']))
+            ->assertDontSee('title="Peta lokasi pengadilan"', false);
+
+        $this->put(route('admin.settings.update'), ['google_maps_embed_url' => ''])->assertSessionHasNoErrors();
+        $this->get(route('page.show', ['section' => 'profil', 'slug' => 'kontak']))
+            ->assertDontSee('title="Peta lokasi pengadilan"', false);
+    }
+
+    public function test_map_setting_rejects_non_google_or_non_embed_urls(): void
+    {
+        config(['portal.require_2fa' => false]);
+        $admin = User::factory()->create([
+            'role' => 'superadmin',
+            'is_active' => true,
+            'must_change_password' => false,
+        ]);
+
+        foreach ([
+            'https://www.google.com.evil.example/maps/embed?pb=test',
+            'http://www.google.com/maps/embed?pb=test',
+            'https://www.google.com/maps/place/example',
+            '<iframe src="https://www.google.com/maps/embed?pb=test"></iframe>',
+        ] as $url) {
+            $this->actingAs($admin)->put(route('admin.settings.update'), ['google_maps_embed_url' => $url])
+                ->assertSessionHasErrors('google_maps_embed_url');
+        }
+    }
 }

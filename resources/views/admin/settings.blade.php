@@ -12,7 +12,7 @@
                 <div class="row g-3">
                     @foreach($fields as $f)
                         @php $name = $f['name']; $val = $setting($name, $f['default'] ?? null); @endphp
-                        <div class="col-md-{{ in_array($f['type'], ['textarea','image','favicon']) ? 12 : 6 }}">
+                        <div class="col-md-{{ in_array($f['type'], ['textarea','image','favicon','maps_embed']) ? 12 : 6 }}">
                             <label class="form-label fw-semibold" for="s_{{ $name }}">{{ $f['label'] }}</label>
                             @if($f['type'] === 'textarea')
                                 <textarea id="s_{{ $name }}" name="{{ $name }}" rows="3" class="form-control @error($name) is-invalid @enderror">{{ old($name, $val) }}</textarea>

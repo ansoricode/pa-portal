@@ -25,11 +25,14 @@ class SettingController extends Controller
             $rules[$f['name']] = match ($f['type']) {
                 'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
                 'favicon' => 'nullable|file|mimetypes:image/png,image/x-icon,image/vnd.microsoft.icon|max:1024',
+                'maps_embed' => ['nullable', 'string', 'max:5000', 'url:https', 'regex:~\Ahttps://www\.google\.com/maps/embed(?:/v1/[a-z]+)?\?.+\z~i'],
                 'select' => ['nullable', 'string', Rule::in(array_keys($f['options'] ?? []))],
                 default => 'nullable|string|max:1000',
             };
         }
-        $request->validate($rules);
+        $request->validate($rules, [
+            'google_maps_embed_url.regex' => 'Masukkan URL sematan Google Maps yang diawali https://www.google.com/maps/embed.',
+        ]);
 
         $changed = [];
         foreach ($fields as $f) {

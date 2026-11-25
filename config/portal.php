@@ -70,6 +70,7 @@ return [
             ['name' => 'whatsapp',         'label' => 'WhatsApp PTSP',          'type' => 'text', 'hint' => 'Ditampilkan sebagai tautan WhatsApp PTSP pada bar atas header. Contoh: 0812-3456-7890.'],
             ['name' => 'email',            'label' => 'Email Resmi',            'type' => 'text'],
             ['name' => 'website',          'label' => 'Website Resmi',          'type' => 'text'],
+            ['name' => 'google_maps_embed_url', 'label' => 'URL Sematan Google Maps', 'type' => 'maps_embed', 'hint' => 'Di Google Maps pilih Bagikan > Sematkan peta, lalu salin hanya URL pada atribut src (bukan seluruh kode iframe).'],
             ['name' => 'building_photo', 'label' => 'Foto Gedung', 'type' => 'image', 'hint' => 'Foto ini ditampilkan pada halaman Alamat, Kontak & Foto Gedung.'],
             ['name' => 'building_photo_caption', 'label' => 'Keterangan Foto Gedung', 'type' => 'textarea'],
             [

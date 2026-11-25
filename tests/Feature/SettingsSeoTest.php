@@ -92,6 +92,29 @@ class SettingsSeoTest extends TestCase
         ])->assertSessionHasErrors('favicon');
     }
 
+    public function test_favicon_is_used_on_admin_and_authentication_pages_with_a_working_default(): void
+    {
+        config(['portal.require_2fa' => false]);
+        $admin = User::factory()->create([
+            'role' => 'superadmin',
+            'is_active' => true,
+            'must_change_password' => false,
+        ]);
+
+        Setting::put('favicon', null);
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('<link rel="icon" href="'.asset('favicon.svg').'" type="image/svg+xml">', false);
+
+        Setting::put('favicon', 'uploads/settings/custom.png');
+        $expected = '<link rel="icon" href="'.asset('storage/uploads/settings/custom.png').'" type="image/png">';
+
+        $this->get(route('login'))->assertOk()->assertSee($expected, false);
+        $this->withSession(['2fa' => ['id' => $admin->id, 'at' => now()->timestamp]])
+            ->get(route('admin.2fa.challenge'))->assertOk()->assertSee($expected, false);
+        $this->actingAs($admin)->get(route('admin.settings'))->assertOk()->assertSee($expected, false);
+    }
+
     public function test_header_social_and_whatsapp_settings_are_rendered(): void
     {
         config(['portal.require_2fa' => false]);

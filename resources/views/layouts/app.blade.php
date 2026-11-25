@@ -6,9 +6,6 @@
     $metaTitle = trim($__env->yieldContent('meta_title')) ?: ($pageTitle !== '' ? $pageTitle . ' | ' . $seoSiteName : $seoSiteName);
     $metaDescription = trim(strip_tags((string) $__env->yieldContent('meta_description'))) ?: $setting('site_description', 'Portal Resmi Satuan Kerja Peradilan Agama');
     $metaKeywords = trim((string) $setting('seo_keywords', ''));
-    $faviconPath = $setting('favicon');
-    $faviconUrl = $faviconPath ? asset('storage/' . $faviconPath) : asset('favicon.ico');
-    $faviconType = $faviconPath && str_ends_with(strtolower($faviconPath), '.png') ? 'image/png' : 'image/x-icon';
     $ogImage = trim($__env->yieldContent('og_image')) ?: ($setting('og_image') ? asset('storage/' . $setting('og_image')) : $logo);
     $ogTitle = trim($__env->yieldContent('og_title')) ?: $metaTitle;
     $ogDescription = trim(strip_tags((string) $__env->yieldContent('og_description'))) ?: $metaDescription;
@@ -39,7 +36,7 @@
     @if($metaKeywords !== '')<meta name="keywords" content="{{ $metaKeywords }}">@endif
     <meta name="theme-color" content="#056e4f">
     <title>{{ $metaTitle }}</title>
-    <link rel="icon" href="{{ $faviconUrl }}" type="{{ $faviconType }}">
+    @include('partials.favicon')
     <meta property="og:locale" content="id_ID">
     <meta property="og:site_name" content="{{ $siteName }}">
     <meta property="og:type" content="{{ $ogType }}">
