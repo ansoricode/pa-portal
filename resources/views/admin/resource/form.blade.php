@@ -53,6 +53,20 @@
                             <div class="form-text mb-2">Memilih berita akan mengisi tautan di bawah. URL manual tetap bisa digunakan.</div>
                         @endif
                         <input type="text" id="f_{{ $name }}" name="{{ $name }}" value="{{ $value }}" class="form-control {{ $invalid }}">
+                    @elseif($type === 'tags')
+                        <div class="tag-input form-control {{ $invalid }}" data-tag-input>
+                            <div class="tag-input-chips"></div>
+                            <input type="text" class="tag-input-field" placeholder="Ketik lalu tekan Enter" aria-label="{{ $f['label'] }}">
+                            <textarea id="f_{{ $name }}" name="{{ $name }}" class="d-none">{{ $value }}</textarea>
+                        </div>
+                        <div class="form-text"><span data-tag-count>0</span> item</div>
+                    @elseif($type === 'map')
+                        <div class="input-group">
+                            <input type="text" id="f_{{ $name }}" name="{{ $name }}" value="{{ $value }}" class="form-control {{ $invalid }}" placeholder="https://www.google.com/maps/embed?pb=..." data-map-input>
+                            <button type="button" class="btn btn-outline-secondary" data-map-check>Cek peta</button>
+                        </div>
+                        <div class="form-text" data-map-status></div>
+                        <iframe class="w-100 border rounded mt-2 d-none" style="height:320px" title="Pratinjau Google Maps" referrerpolicy="no-referrer" data-map-preview></iframe>
                     @elseif($type === 'number')
                         <input type="number" id="f_{{ $name }}" name="{{ $name }}" value="{{ $value }}" class="form-control {{ $invalid }}" style="max-width:200px">
                     @elseif($type === 'date')

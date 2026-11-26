@@ -33,6 +33,13 @@
         .img-toolbar button { border:1px solid #ced4da; background:#f8f9fa; border-radius:.25rem; font-size:.78rem; padding:.15rem .5rem; }
         .img-toolbar button:hover, .img-toolbar button.active { background:var(--pa-primary); color:#fff; border-color:var(--pa-primary); }
         .img-toolbar .sep { width:100%; height:0; }
+        .tag-input { display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; height:auto; min-height:38px; cursor:text; }
+        .tag-input.is-invalid { border-color:#dc3545; }
+        .tag-input-chips { display:contents; }
+        .tag-chip { display:inline-flex; align-items:center; gap:.3rem; background:#e3f1ea; color:var(--pa-primary-dark); border-radius:999px; padding:.1rem .35rem .1rem .7rem; font-size:.85rem; }
+        .tag-chip button { border:0; background:transparent; color:inherit; line-height:1; padding:0 .25rem; font-size:1.05rem; }
+        .tag-chip button:hover { color:#dc3545; }
+        .tag-input-field { flex:1 1 140px; min-width:140px; border:0; outline:0; padding:.15rem 0; background:transparent; }
         .dashboard-chart-scroll { overflow-x:auto; }
         .dashboard-chart-svg { display:block; width:100%; min-width:720px; height:auto; }
     </style>
@@ -191,6 +198,104 @@
         el.closest('form').addEventListener('submit', function () {
             hideImageToolbar();
             target.value = quill.root.innerHTML === '<p><br></p>' ? '' : quill.root.innerHTML;
+        });
+    });
+    document.querySelectorAll('[data-tag-input]').forEach(function (box) {
+        var store = box.querySelector('textarea');
+        var field = box.querySelector('.tag-input-field');
+        var chips = box.querySelector('.tag-input-chips');
+        var counter = box.parentNode.querySelector('[data-tag-count]');
+        var tags = [];
+
+        function sync() {
+            store.value = tags.join('\n');
+            if (counter) counter.textContent = tags.length;
+            chips.textContent = '';
+            tags.forEach(function (tag, index) {
+                var chip = document.createElement('span');
+                chip.className = 'tag-chip';
+                chip.appendChild(document.createTextNode(tag));
+                var remove = document.createElement('button');
+                remove.type = 'button';
+                remove.setAttribute('aria-label', 'Hapus ' + tag);
+                remove.textContent = '×';
+                remove.addEventListener('click', function () { tags.splice(index, 1); sync(); field.focus(); });
+                chip.appendChild(remove);
+                chips.appendChild(chip);
+            });
+        }
+
+        function addTags(text) {
+            text.split(/[\r\n,]+/).forEach(function (part) {
+                var tag = part.trim();
+                if (tag && !tags.some(function (t) { return t.toLowerCase() === tag.toLowerCase(); })) tags.push(tag);
+            });
+            sync();
+        }
+
+        field.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ',') {
+                event.preventDefault();
+                addTags(field.value);
+                field.value = '';
+            } else if (event.key === 'Backspace' && !field.value && tags.length) {
+                tags.pop();
+                sync();
+            }
+        });
+        field.addEventListener('paste', function (event) {
+            var text = (event.clipboardData || window.clipboardData).getData('text');
+            if (/[\r\n,]/.test(text)) {
+                event.preventDefault();
+                addTags(text);
+            }
+        });
+        field.addEventListener('blur', function () { addTags(field.value); field.value = ''; });
+        box.addEventListener('click', function () { field.focus(); });
+        box.closest('form').addEventListener('submit', function () { addTags(field.value); field.value = ''; });
+        addTags(store.value);
+    });
+    document.querySelectorAll('[data-map-input]').forEach(function (input) {
+        var group = input.closest('.mb-3');
+        var status = group.querySelector('[data-map-status]');
+        var preview = group.querySelector('[data-map-preview]');
+
+        // Kode iframe dari Google Maps otomatis diubah menjadi URL-nya saja
+        function extractSrc() {
+            var m = input.value.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i);
+            if (m) input.value = m[1].replace(/&amp;/g, '&');
+        }
+
+        function embedUrl(url) {
+            var m;
+            if (!/^https:\/\/(www\.google\.com|maps\.google\.com)\/maps/.test(url)) return null;
+            if (url.indexOf('https://www.google.com/maps/embed') === 0) return url;
+            if ((m = url.match(/\/maps\/place\/([\w%+.,-]+)/)) || (m = url.match(/[?&](?:q|query)=([\w%+.,-]+)/))) return 'https://www.google.com/maps?q=' + m[1] + '&output=embed';
+            if ((m = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/))) return 'https://www.google.com/maps?q=' + m[1] + ',' + m[2] + '&output=embed';
+            return null;
+        }
+
+        input.addEventListener('input', extractSrc);
+        input.addEventListener('paste', function () { setTimeout(extractSrc, 0); });
+        group.querySelector('[data-map-check]').addEventListener('click', function () {
+            extractSrc();
+            var url = input.value.trim();
+            status.className = 'form-text';
+            preview.classList.add('d-none');
+            if (!url) {
+                status.textContent = 'Tautan masih kosong.';
+                return;
+            }
+            var embed = embedUrl(url);
+            if (!embed) {
+                status.textContent = 'Tautan tidak dikenali. Gunakan Bagikan > Sematkan peta di Google Maps (tautan pendek maps.app.goo.gl tidak bisa disematkan).';
+                status.classList.add('text-danger');
+                return;
+            }
+            status.textContent = 'Tautan valid.';
+            status.classList.add('text-success');
+            preview.src = embed;
+            preview.classList.remove('d-none');
         });
     });
     document.querySelectorAll('[data-insert-media]').forEach(function (button) {

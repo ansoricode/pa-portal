@@ -189,6 +189,9 @@ return [
         'columns' => ['name' => 'Nama Kecamatan/Kabupaten/Kota', 'sort_order' => 'Urutan'],
         'fields' => [
             ['name' => 'name', 'label' => 'Nama Wilayah', 'type' => 'text', 'rules' => 'required|string|max:150'],
+            ['name' => 'villages', 'label' => 'Desa/Kelurahan', 'type' => 'tags', 'rules' => 'nullable|string|max:5000', 'help' => 'Ketik nama desa/kelurahan lalu tekan Enter atau koma. Anda juga bisa menempel banyak nama sekaligus.'],
+            ['name' => 'radius', 'label' => 'Radius', 'type' => 'text', 'rules' => 'nullable|string|max:100', 'help' => 'Contoh: 15 km dari pengadilan.'],
+            ['name' => 'map_url', 'label' => 'Peta Google Maps (embed)', 'type' => 'map', 'rules' => 'nullable|url:https|max:2000|starts_with:https://www.google.com/maps,https://maps.google.com/maps', 'help' => 'Di Google Maps pilih Bagikan > Sematkan peta, lalu tempel kode iframe atau URL-nya di sini. Klik "Cek peta" untuk pratinjau.'],
             ['name' => 'sort_order', 'label' => 'Urutan', 'type' => 'number', 'default' => 0, 'rules' => 'nullable|integer|min:0'],
         ],
     ],

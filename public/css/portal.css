@@ -846,6 +846,19 @@
 @media (max-width: 575.98px) {
     .page-body img.img-left, .page-body img.img-right { float: none; display: block; margin: .5rem auto; }
 }
+.yd-card { background: #fff; border: 1px solid #dee2e6; border-radius: .75rem; padding: 1rem 1.1rem; box-shadow: 0 .125rem .5rem rgba(23, 53, 43, .05); }
+.yd-card-head { display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; }
+.yd-number { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--pa-primary); color: #fff; font-weight: 700; font-size: .85rem; }
+.yd-title { flex: 1 1 auto; margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--pa-primary); }
+.yd-radius { background: #fff4e0; color: #8a5300; border: 1px solid var(--pa-secondary); border-radius: 999px; padding: .1rem .65rem; font-size: .8rem; font-weight: 600; white-space: nowrap; }
+.yd-card-body { margin-top: .75rem; }
+.yd-count { font-size: .8rem; color: #6c757d; margin-bottom: .4rem; }
+.yd-chips { display: flex; flex-wrap: wrap; gap: .35rem; list-style: none; padding: 0; margin: 0; }
+.yd-chips li { background: #eef5f1; color: var(--pa-primary-dark); border-radius: 999px; padding: .15rem .7rem; font-size: .82rem; }
+.yd-file { margin-top: .85rem; }
+.yd-file summary { cursor: pointer; list-style: none; }
+.yd-file summary::-webkit-details-marker { display: none; }
+.yd-embed { display: block; width: 100%; height: clamp(320px, 60vh, 520px); border: 1px solid #dee2e6; border-radius: .5rem; margin-top: .75rem; }
 .page-media-item { overflow: hidden; background: #e9ecef; }
 .page-media-item img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .25s ease; }
 .page-media-item:hover img { transform: scale(1.04); }
