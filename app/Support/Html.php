@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\File;
 /**
  * Membersihkan HTML dari editor teks kaya (berita & halaman) agar aman dari XSS.
  * Hanya tag yang dihasilkan toolbar editor dan penyisip media yang diizinkan; script,
- * style, iframe, atribut on*, dan tautan javascript: dibuang.
+ * style, iframe, atribut on*, dan tautan javascript: dibuang. Atribut class hanya
+ * boleh berisi kelas perataan teks dan posisi/ukuran gambar.
  */
 class Html
 {
@@ -33,7 +34,12 @@ class Html
             $config = HTMLPurifier_Config::createDefault();
             $config->set('Core.Encoding', 'UTF-8');
             $config->set('Cache.SerializerPath', $cache);
-            $config->set('HTML.Allowed', 'p,br,strong,b,em,i,u,s,h2,h3,h4,ul,ol,li,blockquote,a[href|title|target|rel],img[src|alt|title|width|height]');
+            $config->set('HTML.Allowed', 'p[class],br,strong,b,em,i,u,s,h2[class],h3[class],h4[class],ul,ol,li[class],blockquote[class],a[href|title|target|rel],img[src|alt|title|width|height|class]');
+            $config->set('Attr.AllowedClasses', [
+                'ql-align-center', 'ql-align-right', 'ql-align-justify',
+                'img-left', 'img-center', 'img-right',
+                'img-w-25', 'img-w-50', 'img-w-75', 'img-w-100',
+            ]);
             $config->set('URI.AllowedSchemes', ['http' => true, 'https' => true, 'mailto' => true, 'tel' => true]);
             $config->set('Attr.AllowedFrameTargets', ['_blank']);
             $config->set('HTML.TargetNoopener', true);

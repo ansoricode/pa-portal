@@ -20,6 +20,19 @@
         .btn-pa { background:var(--pa-primary); color:#fff; border-color:var(--pa-primary); }
         .btn-pa:hover { background:var(--pa-primary-dark); color:#fff; }
         .ql-editor { min-height:240px; background:#fff; }
+        .ql-editor img { max-width:100%; height:auto; cursor:pointer; }
+        .ql-editor img.img-left { float:left; margin:.25rem 1rem .5rem 0; }
+        .ql-editor img.img-right { float:right; margin:.25rem 0 .5rem 1rem; }
+        .ql-editor img.img-center { display:block; float:none; margin:.5rem auto; }
+        .ql-editor img.img-w-25 { width:25%; }
+        .ql-editor img.img-w-50 { width:50%; }
+        .ql-editor img.img-w-75 { width:75%; }
+        .ql-editor img.img-w-100 { width:100%; }
+        .ql-editor img.img-selected { outline:3px solid var(--pa-secondary); }
+        .img-toolbar { position:absolute; z-index:20; display:none; gap:.25rem; flex-wrap:wrap; max-width:340px; padding:.35rem; background:#fff; border:1px solid #ced4da; border-radius:.375rem; box-shadow:0 .25rem .75rem rgba(0,0,0,.15); }
+        .img-toolbar button { border:1px solid #ced4da; background:#f8f9fa; border-radius:.25rem; font-size:.78rem; padding:.15rem .5rem; }
+        .img-toolbar button:hover, .img-toolbar button.active { background:var(--pa-primary); color:#fff; border-color:var(--pa-primary); }
+        .img-toolbar .sep { width:100%; height:0; }
         .dashboard-chart-scroll { overflow-x:auto; }
         .dashboard-chart-svg { display:block; width:100%; min-width:720px; height:auto; }
     </style>
@@ -68,12 +81,107 @@
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 @stack('scripts')
 <script nonce="{{ $cspNonce ?? '' }}">
+    // Perataan paragraf memakai kelas (ql-align-*), bukan style inline, agar lolos sanitizer HTML.
+    Quill.register(Quill.import('attributors/class/align'), true);
+
+    // Gambar: posisi (img-left/center/right) dan lebar (img-w-25/50/75/100) disimpan sebagai kelas.
+    var IMG_ALIGNS = ['left', 'center', 'right'];
+    var IMG_SIZES = ['25', '50', '75', '100'];
+    var BaseImage = Quill.import('formats/image');
+    class ImageBlot extends BaseImage {
+        static formats(node) {
+            var formats = BaseImage.formats(node);
+            IMG_ALIGNS.forEach(function (a) { if (node.classList.contains('img-' + a)) formats.imgalign = a; });
+            IMG_SIZES.forEach(function (s) { if (node.classList.contains('img-w-' + s)) formats.imgsize = s; });
+            return formats;
+        }
+        format(name, value) {
+            if (name === 'imgalign') {
+                IMG_ALIGNS.forEach(function (a) { this.domNode.classList.remove('img-' + a); }, this);
+                if (value) this.domNode.classList.add('img-' + value);
+            } else if (name === 'imgsize') {
+                IMG_SIZES.forEach(function (s) { this.domNode.classList.remove('img-w-' + s); }, this);
+                if (value) this.domNode.classList.add('img-w-' + value);
+            } else {
+                super.format(name, value);
+            }
+        }
+    }
+    Quill.register(ImageBlot, true);
+
+    var imageToolbar = document.createElement('div');
+    imageToolbar.className = 'img-toolbar';
+    [['imgalign', 'left', 'Kiri'], ['imgalign', 'center', 'Tengah'], ['imgalign', 'right', 'Kanan'], ['imgalign', '', 'Normal'], ['sep'],
+        ['imgsize', '25', '25%'], ['imgsize', '50', '50%'], ['imgsize', '75', '75%'], ['imgsize', '100', '100%'], ['imgsize', '', 'Asli']].forEach(function (def) {
+        if (def[0] === 'sep') {
+            var sep = document.createElement('div');
+            sep.className = 'sep';
+            imageToolbar.appendChild(sep);
+            return;
+        }
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = def[2];
+        btn.dataset.format = def[0];
+        btn.dataset.value = def[1];
+        imageToolbar.appendChild(btn);
+    });
+    document.body.appendChild(imageToolbar);
+    var activeImage = null;
+    var activeQuill = null;
+
+    function hideImageToolbar() {
+        if (activeImage) activeImage.classList.remove('img-selected');
+        activeImage = null;
+        activeQuill = null;
+        imageToolbar.style.display = 'none';
+    }
+
+    function refreshImageToolbar() {
+        if (!activeImage) return;
+        var rect = activeImage.getBoundingClientRect();
+        imageToolbar.style.display = 'flex';
+        imageToolbar.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+        imageToolbar.style.left = (window.scrollX + Math.max(8, rect.left)) + 'px';
+        imageToolbar.querySelectorAll('button').forEach(function (btn) {
+            var prefix = btn.dataset.format === 'imgalign' ? 'img-' : 'img-w-';
+            var group = btn.dataset.format === 'imgalign' ? IMG_ALIGNS : IMG_SIZES;
+            var current = group.filter(function (v) { return activeImage.classList.contains(prefix + v); })[0] || '';
+            btn.classList.toggle('active', current === btn.dataset.value);
+        });
+    }
+
+    imageToolbar.addEventListener('mousedown', function (event) { event.preventDefault(); });
+    imageToolbar.addEventListener('click', function (event) {
+        var btn = event.target.closest('button');
+        if (!btn || !activeImage || !activeQuill) return;
+        var blot = Quill.find(activeImage);
+        if (!blot) { hideImageToolbar(); return; }
+        activeQuill.formatText(activeQuill.getIndex(blot), 1, btn.dataset.format, btn.dataset.value || false, 'user');
+        refreshImageToolbar();
+    });
+    document.addEventListener('mousedown', function (event) {
+        if (!imageToolbar.contains(event.target) && !(event.target.tagName === 'IMG' && event.target.closest('.ql-editor'))) hideImageToolbar();
+    });
+    window.addEventListener('resize', refreshImageToolbar);
+
     // Editor teks kaya (Quill): salin HTML ke textarea tersembunyi saat form dikirim
     document.querySelectorAll('.quill-editor').forEach(function (el) {
         var target = document.getElementById(el.dataset.target);
         var quill = new Quill(el, {
             theme: 'snow',
-            modules: { toolbar: [[{ header: [2, 3, false] }], ['bold', 'italic', 'underline'], [{ list: 'ordered' }, { list: 'bullet' }], ['blockquote', 'link'], ['clean']] }
+            modules: { toolbar: [[{ header: [2, 3, false] }], ['bold', 'italic', 'underline'], [{ list: 'ordered' }, { list: 'bullet' }], [{ align: [] }], ['blockquote', 'link'], ['clean']] }
+        });
+        quill.root.addEventListener('click', function (event) {
+            if (event.target.tagName !== 'IMG') return;
+            if (activeImage) activeImage.classList.remove('img-selected');
+            activeImage = event.target;
+            activeQuill = quill;
+            activeImage.classList.add('img-selected');
+            refreshImageToolbar();
+        });
+        quill.on('text-change', function () {
+            if (activeImage && !document.body.contains(activeImage)) hideImageToolbar();
         });
         quill.savedRange = { index: Math.max(0, quill.getLength() - 1), length: 0 };
         el.quillInstance = quill;
@@ -81,6 +189,7 @@
             if (range) quill.savedRange = range;
         });
         el.closest('form').addEventListener('submit', function () {
+            hideImageToolbar();
             target.value = quill.root.innerHTML === '<p><br></p>' ? '' : quill.root.innerHTML;
         });
     });

@@ -832,6 +832,20 @@
 .page-body { line-height: 1.8; color: #6c757d; }
 .page-body blockquote { background:#f8f9fa; padding:1rem; border-left:4px solid var(--pa-secondary); border-radius:.375rem; color: var(--pa-primary); font-weight:600; }
 .ql-editor { min-height: 220px; }
+.page-body .ql-align-center { text-align: center; }
+.page-body .ql-align-right { text-align: right; }
+.page-body .ql-align-justify { text-align: justify; }
+.page-body img.img-left { float: left; margin: .25rem 1rem .5rem 0; }
+.page-body img.img-right { float: right; margin: .25rem 0 .5rem 1rem; }
+.page-body img.img-center { display: block; float: none; margin: .5rem auto; }
+.page-body img.img-w-25 { width: 25%; }
+.page-body img.img-w-50 { width: 50%; }
+.page-body img.img-w-75 { width: 75%; }
+.page-body img.img-w-100 { width: 100%; }
+.page-body::after { content: ""; display: block; clear: both; }
+@media (max-width: 575.98px) {
+    .page-body img.img-left, .page-body img.img-right { float: none; display: block; margin: .5rem auto; }
+}
 .page-media-item { overflow: hidden; background: #e9ecef; }
 .page-media-item img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .25s ease; }
 .page-media-item:hover img { transform: scale(1.04); }
